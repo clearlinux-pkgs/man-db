@@ -4,7 +4,7 @@
 #
 Name     : man-db
 Version  : 2.7.5
-Release  : 14
+Release  : 15
 URL      : http://nongnu.askapache.com/man-db/man-db-2.7.5.tar.xz
 Source0  : http://nongnu.askapache.com/man-db/man-db-2.7.5.tar.xz
 Summary  : No detailed summary available
