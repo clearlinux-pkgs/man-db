@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.7.5
-Release  : 16
+Release  : 17
 URL      : http://nongnu.askapache.com/man-db/man-db-2.7.5.tar.xz
 Source0  : http://nongnu.askapache.com/man-db/man-db-2.7.5.tar.xz
 Source99 : http://nongnu.askapache.com/man-db/man-db-2.7.5.tar.xz.sig
@@ -19,6 +19,7 @@ Requires: man-db-lib
 Requires: man-db-data
 Requires: man-db-doc
 Requires: man-db-locales
+Requires: groff
 BuildRequires : automake
 BuildRequires : automake-dev
 BuildRequires : db-dev
@@ -99,7 +100,7 @@ locales components for the man-db package.
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1484438569
+export SOURCE_DATE_EPOCH=1489757888
 %reconfigure --disable-static --disable-setuid
 make V=1  %{?_smp_mflags}
 
@@ -111,7 +112,7 @@ export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1484438569
+export SOURCE_DATE_EPOCH=1489757888
 rm -rf %{buildroot}
 %make_install
 %find_lang man-db-gnulib
