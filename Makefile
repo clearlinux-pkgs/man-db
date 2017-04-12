@@ -1,5 +1,5 @@
 PKG_NAME := man-db
-URL := http://nongnu.askapache.com/man-db/man-db-2.7.5.tar.xz
+URL := http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz
 
 
 include ../common/Makefile.common

@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x393587D97D86500B (cjwatson@debian.org)
 #
 Name     : man-db
-Version  : 2.7.5
-Release  : 17
-URL      : http://nongnu.askapache.com/man-db/man-db-2.7.5.tar.xz
-Source0  : http://nongnu.askapache.com/man-db/man-db-2.7.5.tar.xz
-Source99 : http://nongnu.askapache.com/man-db/man-db-2.7.5.tar.xz.sig
+Version  : 2.7.6.1
+Release  : 18
+URL      : http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz
+Source0  : http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz
+Source99 : http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz.sig
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0 GPL-2.0+ GPL-3.0+ LGPL-2.1
@@ -95,12 +95,12 @@ locales components for the man-db package.
 
 
 %prep
-%setup -q -n man-db-2.7.5
+%setup -q -n man-db-2.7.6.1
 %patch1 -p1
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1489757888
+export SOURCE_DATE_EPOCH=1492030736
 %reconfigure --disable-static --disable-setuid
 make V=1  %{?_smp_mflags}
 
@@ -112,7 +112,7 @@ export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1489757888
+export SOURCE_DATE_EPOCH=1492030736
 rm -rf %{buildroot}
 %make_install
 %find_lang man-db-gnulib
@@ -169,9 +169,9 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/man-db/libman-2.7.5.so
+/usr/lib64/man-db/libman-2.7.6.1.so
 /usr/lib64/man-db/libman.so
-/usr/lib64/man-db/libmandb-2.7.5.so
+/usr/lib64/man-db/libmandb-2.7.6.1.so
 /usr/lib64/man-db/libmandb.so
 
 %files locales -f man-db-gnulib.lang -f man-db.lang

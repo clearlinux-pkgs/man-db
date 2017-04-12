@@ -1,4 +1,397 @@
+2016-12-12  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.7.6.1.
+
+2016-12-12  Colin Watson  <cjwatson@debian.org>
+
+	Correct installation of Swedish manual pages
+
+	* man/sv/Makefile.am (LINGUA): Set to sv, not nl.
+	* NEWS: Document this.
+
+2016-12-12  Colin Watson  <cjwatson@debian.org>
+
+	* NEWS: Document previous change.
+
+2016-12-12  Colin Watson  <cjwatson@debian.org>
+
+	Don't chmod CACHEDIR.TAG if it doesn't exist
+
+	The containing directory might reasonably not exist.  Fixes Debian
+	bug #847810.
+
+	* src/mandb.c (mandb): Only chown/chmod CACHEDIR.TAG if it exists.
+
+2016-12-11  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.7.6.
+
+2016-12-11  Colin Watson  <cjwatson@debian.org>
+
+	Fix systemd tmpfiles group/perms of /var/cache/man
+
+	* init/systemd/man-db.conf: Change mode to 0755 and group to man.
+
+2016-12-11  Colin Watson  <cjwatson@debian.org>
+
+	Fix Polish mandb(8) "cannot adjust line" warnings
+
+	* man/man8/mandb.man8 (DATABASE CACHES): Set a width of 20em for the
+	"Type" column.
+
+2016-12-11  Colin Watson  <cjwatson@debian.org>
+
+	Drop documentation of gdbm < 1.6
+
+	gdbm 1.6 was released in 1993; it's no longer necessary to document
+	mandb's behaviour with older versions.
+
+	* man/man8/mandb.man8 (DATABASE CACHES): Remove "GNU gdbm v < 1.6" row.
+	Simplify "GNU gdbm v >= 1.6" to "GNU gdbm".  Update all translations.
+
+2016-12-11  Colin Watson  <cjwatson@debian.org>
+
+	Fix table rendering with po4a 0.47
+
+	* man/po4a/Locale/Po4a/Manext.pm (initialize): Drop unused assignment.
+	(shiftline, pushline): Pass through to superclass if po4a version >=
+	0.47.
+	(translate): With po4a >= 0.47, don't process text blocks since po4a now
+	does that, but handle @-separation of columns and remove trailing
+	newlines from translatable strings.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update (line
+	numbers only).
+	* NEWS: Document this.
+
+2016-12-11  Colin Watson  <cjwatson@debian.org>
+
+	Fix distcheck following cache-owner/setuid changes
+
+	We previously ignored chown failures on "make install", but that's not
+	really correct.  Instead, configure with --disable-setuid during
+	distcheck.
+
+	* Makefile.am (AM_DISTCHECK_CONFIGURE_FLAGS): Add --disable-setuid.
+
+2016-12-11  Colin Watson  <cjwatson@debian.org>
+
+	Update translation files
+
+	* po/man-db.pot, po/*.po: Update.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update.
+
+2016-12-11  Colin Watson  <cjwatson@debian.org>
+
+	* NEWS: Document changes since 2.7.5.
+
+2016-12-11  Mihail Konev  <k.mvc@ya.ru>
+
+	src/tests: Use /tmp for temporary directories
+
+	Reduces disk reads/writes made by 'make check -C src'.
+
+	Fall back to ./tmp-* if 'mktemp -d' fails.
+
+2016-12-10  Colin Watson  <cjwatson@debian.org>
+
+	Eliminate dangerous setgid-root directories
+
+	man-db has created its cache directories as setgid root for nearly 20
+	years.  This seems to have originated in https://bugs.debian.org/26002.
+	However, this has some dangerous consequences, such as:
+
+	  http://www.halfdog.net/Security/2015/SetgidDirectoryPrivilegeEscalation/
+
+	It seems best to arrange for cache files and directories to be man:man
+	rather than man:root.  To do this reliably, as well as adjusting various
+	chown and chmod calls, we make man and mandb be setgid man as well as
+	setuid man (except in the --disable-setuid case).  This is a much
+	simpler and safer solution to the original problem, and doesn't
+	introduce any interesting new privilege since the man group's only real
+	purpose is to be the man user's primary group and nothing in cache
+	directories is group-writeable.
+
+	* configure.ac (AC_CHECK_FUNCS): Add lchown.
+	* lib/security.c (init_security): Record initial real and effective
+	group IDs as well as user IDs.
+	(drop_effective_privs, regain_effective_privs): Update gid.
+	* lib/xchown.c (xlchown) [HAVE_LCHOWN]: New function.
+	* lib/xchown.c (xlchown) [HAVE_LCHOWN]: Add prototype.
+	* m4/man-arg-setuid.m4: Set man_mode to 6755 rather than 4755 in the
+	--enable-setuid case.
+	* src/Makefile.am (install-exec-hook): Check for man_mode being 6755
+	rather than 4755.  Set the group of man and mandb as well as their
+	owner.
+	* src/check_mandirs.c (chown_if_possible): New function.  This is
+	somewhat more careful than previous implementations, changes the group
+	as well as the user if possible, and prefers lchown if it is available.
+	(mkcatdirs): Drop S_ISGID from cat directories.  Use chown_if_possible.
+	(fix_permissions, fix_permissions_tree): New functions to remove setgid
+	bit from existing cat directories.
+	(testmandirs): Call fix_permissions_tree.
+	* src/check_mandirs.h (chown_if_possible): Add prototype.
+	* src/man.c (commit_tmp_cat): Set cat file group as well as owner.
+	* src/mandb.c (check_chown): Remove.
+	(do_chown): Stop taking a uid parameter.  Use chown_if_possible.
+	(mandb): Use chown_if_possible for CACHEDIR.TAG.  Set ownership and
+	permissions of CACHEDIR.TAG even if it already exists.
+	(process_manpath): Set ownership of database files even if they have not
+	been changed.
+
+2016-12-10  Colin Watson  <cjwatson@debian.org>
+
+	Make --disable-cache-owner imply --disable-setuid
+
+	* m4/man-arg-setuid.m4: Set man_mode="755" if --disable-cache-owner was
+	given and neither --enable-setuid nor --disable-setuid was given.
+
+2016-12-10  Colin Watson  <cjwatson@debian.org>
+
+	Update manual for cache-owner/setuid changes
+
+	* manual/intro.me (Arguments to configure): Add --enable-cache-owner and
+	--disable-cache-owner.  Remove --enable-setuid[=ARG].  Adjust
+	description of --disable-setuid.
+	* manual/misc.me (Modes of operation): Add --disable-cache-owner to the
+	non-setuid modes.  Mention --enable-setuid rather than
+	--enable-setuid=USER.
+	* README (Non-generic arguments to configure): Update.
+
+2016-12-10  Colin Watson  <cjwatson@debian.org>
+
+	Allocate dbpaths on the heap rather than the stack
+
+	process_manpath's stack may have gone out of scope by the time cleanup
+	functions are called.
+
+	* src/mandb.c (cleanup): Free dbpaths.
+	(process_manpath): Allocate dbpaths on the heap.
+
+2016-12-10  Colin Watson  <cjwatson@debian.org>
+
+	Handle cleanup stack more safely
+
+	If push_cleanup was called unexpectedly between a
+	push_cleanup/pop_cleanup pair, then the pop_cleanup would remove the
+	wrong cleanup function and chaos could ensue.  Avoid this by being more
+	precise about which cleanup function should be popped.
+
+	* lib/cleanup.c (pop_cleanup): Take "fun" and "arg" arguments.  Pop the
+	topmost matching function from the stack, rather than just the topmost
+	function.  Update all callers and prototypes.
+
+2016-12-09  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade config.guess/config.sub
+
+	* build-aux/config.guess: Upgrade to 2016-10-02.
+	* build-aux/config.sub: Upgrade to 2016-11-04.
+
+2016-12-09  Colin Watson  <cjwatson@debian.org>
+
+	Separate cache owner from --enable-setuid option
+
+	It's useful to have a notion of the cache owner even when man is not
+	installed setuid.  --enable-setuid no longer takes an argument, and the
+	owner is now set by the --enable-cache-owner option instead.
+
+	* m4/man-arg-cache-owner.m4: New file.
+	* m4/man-arg-setuid.m4: Stop accepting an argument.  Only set man_mode,
+	not man_owner.
+	* configure.ac: Call MAN_ARG_CACHE_OWNER.
+	* src/Makefile.am (install-exec-hook): Only chown man and mandb if
+	man_mode is 4755 (as well as the existing test for man_owner being
+	non-empty).
+
+2016-11-21  Colin Watson  <cjwatson@debian.org>
+
+	Restore ylwrap to distribution
+
+	* Makefile.in (am__DIST_COMMON): Regenerate to add build-aux/ylwrap back
+	again, since it mysteriously went missing in the last regeneration.
+
+2016-11-21  Colin Watson  <cjwatson@debian.org>
+
+	Update translation files
+
+	* po/man-db.pot, po/*.po: Update.
+
+2016-11-21  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade to Libtool 2.4.6-2 (from Debian)
+
+2016-11-21  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade config.guess/config.sub
+
+	* build-aux/config.guess: Upgrade to 2016-04-02.
+	* build-aux/config.sub: Upgrade to 2016-03-30.
+
+2016-11-20  Mihail Konev  <k.mvc@ya.ru>
+
+	src/tests: Fix testsuite
+
+	* src/tests/man-9: Set MANPATH.
+
+2016-11-20  Mihail Konev  <k.mvc@ya.ru>
+
+	man(1): Fix gcc warnings
+
+	* lib/xchown.c: New file.
+	* lib/xchown.h: New file.
+	* lib/Makefile.am (libman_la_SOURCES): Add xchown.c and xchown.h.
+	* po/POTFILES.in: Add lib/xchown.c.
+	* src/check_mandirs.c (mkcatdirs): Call xchown instead of chown.
+	* src/man.c (format_display): Ignore errors from chdir ("/").
+
+2016-11-20  Colin Watson  <cjwatson@debian.org>
+
+	Make split_page_name allocate its own memory
+
+	* src/man.c (split_page_name): Allocate *ret_name and *ret_section here.
+	Simplify using xstrdup and xstrndup.
+	(man): Remove allocation of page_name and page_section.
+
+2016-11-20  Mihail Konev  <k.mvc@ya.ru>
+
+	man(1): add .N names
+
+	`man chmod.2` is now the same as `man 2 chmod`
+
+	* src/man.c (split_page_name): New function.
+	(locate_page_in_manpath): New function.
+	(man): Factor out common locate_page loop into locate_page_in_manpath.
+	Add name/section splitting logic.
+	* src/tests/man-11: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add man-11.
+	* man/man1/man.man1 (SYNOPSIS): Document <page>.<section> form.
+	(EXAMPLES): Likewise.
+
+2016-10-04  Colin Watson  <cjwatson@debian.org>
+
+	Fix formatting error in Swedish translation
+
+	* man/po4a/po/sv.po: Translate "\\(rq" as itself rather than as "\\(".
+
+2016-10-04  Colin Watson  <cjwatson@debian.org>
+
+	Rename some anomalous x* functions
+
+	The usual (though not universal) pattern in gnulib is for xfoo to mean
+	"foo or exit".  Rename x* to check_* so that they don't conflict with
+	this.
+
+	* src/mandb.c (xremove): Rename to ...
+	(check_remove): ... this.
+	(xrename): Rename to ...
+	(check_rename): ... this.
+	(xchmod): Rename to ...
+	(check_chmod): ... this.
+	(xchown): Rename to ...
+	(check_chown): ... this.
+
+2016-05-16  Colin Watson  <cjwatson@debian.org>
+
+	man(1): Fix incorrect font
+
+	* man/man1/man.man1 (SYNOPSIS): Make "--regex" bold.  Thanks to Paul
+	Townsend.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update; unfuzzy all
+	translations.
+
+2016-05-16  Colin Watson  <cjwatson@debian.org>
+
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update.
+
+2016-02-04  Colin Watson  <cjwatson@debian.org>
+
+	Note caveat with "man -K"
+
+	* man/man1/man.man1 (Main modes of operation): Note that -K searches
+	page source.  Fixes Debian bug #813665.
+
+2016-01-02  Sebastian Rasmussen  <sebras@gmail.com>
+
+	* po/sv.po: Add missing translator credit comment.
+
+2016-01-02  Colin Watson  <cjwatson@debian.org>
+
+	Fix warnings with Perl 5.22
+
+	* man/po4a/Locale/Po4a/Manext.pm (shiftline, translate): Escape braces
+	in regular expressions.
+
+2016-01-02  Colin Watson  <cjwatson@debian.org>
+
+	Add Swedish manual page translation
+
+	* man/po4a/po/sv.po: New from Translation Project (thanks, Sebastian
+	Rasmussen).
+	* configure.ac (AC_CONFIG_FILES): Add man/sv/Makefile.
+	* man/LINGUAS.po4a: Add sv.
+	* man/Makefile.am (DIST_SUBDIRS): Add sv.
+	* man/sv/Makefile.am, man/sv/translator.add: New files.
+	* man/po4a/Makefile.am (POFILES): Add po/sv.po.
+	* man/po4a/po4a.cfg (po4a_langs): Add sv.
+	* man/THANKS: Add translator credit.
+	* .gitignore: Add man/sv/man1, man/sv/man5, and man/sv/man8.
+
+2015-12-31  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade to pkg-config 0.29.
+
+2015-12-26  Sebastian Rasmussen  <sebras@gmail.com>
+
+	Update Swedish translation
+
+	* po/sv.po: Update from Translation Project.
+	* man/THANKS: Add translator credit.
+
+2015-12-07  Colin Watson  <cjwatson@debian.org>
+
+	Simplify database path handling in mandb
+
+	* src/mandb.c (struct dbpaths): Unconstify xtmpfile.
+	(finish_up): Free dbpaths->xtmpfile.
+	(cleanup): Update header comment.  Remove unnecessary checks before
+	frees.  Free all database paths for all database types, not just
+	GDBM.  Free dbpaths->xtmpfile.
+	(mandb): Copy content of database to dbpaths->xtmpfile rather than
+	just copying the pointer.
+
+2015-12-07  Colin Watson  <cjwatson@debian.org>
+
+	Move some database paths out of global variables
+
+	* src/mandb.c (struct dbpaths): New structure.
+	(finish_up, do_chown, cleanup_sigsafe, cleanup, mandb): Take dbpaths
+	argument.
+	(process_manpath): Allocate dbpaths on the stack, zero it, and pass
+	it to functions that need it.
+
+2015-12-07  Colin Watson  <cjwatson@debian.org>
+
+	Remove lots of unnecessary inline qualifiers
+
+	It's 2015.  The compiler almost certainly knows better than we do.
+
+	* lib/security.c (gripe_set_euid): Remove inline qualifier.
+	* libdb/db_btree.c (btree_findkey): Likewise.
+	* libdb/mydbm.h (gdbm_exists): Likewise.
+	* src/catman.c (catman): Remove obsolete comment.
+	(add_arg, check_access): Remove inline qualifier.
+	* src/check_mandirs.c (add_dir_entries): Likewise.
+	* src/man.c (gripe_system, gripe_no_man, manopt_to_env, escape_less,
+	is_section, do_prompt, gripe_converting_name): Likewise.
+	* src/mandb.c (xremove, xrename, xchmod, finish_up, xchown,
+	do_chown, update_db_wrapper): Likewise.
+	* src/manp.c (gripe_reading_mp_config, gripe_stat_file,
+	gripe_not_directory, has_mandir, fsstnd): Likewise.
+	* src/whatis.c (do_whatis_section): Likewise.
+
 2015-11-06  Colin Watson  <cjwatson@debian.org>
+
+	Belatedly update NEWS date.
 
 	* Version: 2.7.5.
 

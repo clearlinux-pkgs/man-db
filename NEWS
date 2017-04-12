@@ -1,5 +1,66 @@
-man-db 2.7.5
-============
+man-db 2.7.6.1 (12 December 2016)
+=================================
+
+Major changes since man-db 2.7.6:
+
+	Fixes:
+	------
+
+	o Don't chmod CACHEDIR.TAG if it doesn't exist.
+
+	o Correct installation of Swedish manual pages.
+
+man-db 2.7.6 (11 December 2016)
+===============================
+
+Major changes since man-db 2.7.5:
+
+	Fixes:
+	------
+
+	o Fix build warnings with Perl 5.22.
+
+	o Document that 'man -K' searches page source, not rendered text.
+
+	o Fix a long-standing bug in man-db's internal cleanup stack
+	  mechanism: if a cleanup function was pushed unexpectedly between a
+	  push/pop pair, then popping the stack would remove the wrong
+	  cleanup function and chaos could ensue.  Avoid this by being more
+	  precise about which cleanup function should be popped.
+
+	o SECURITY: Eliminate dangerous setgid-root directories.  In the
+	  default configuration, cache files and directories are now owned
+	  by man:man rather than man:root; man and mandb are now setgid man
+	  as well as setuid man (except in the --disable-setuid case).  This
+	  is a much simpler and safer solution to the original problem that
+	  caused my predecessor to make directories setgid root, and doesn't
+	  introduce any interesting new privilege since the man group's only
+	  real purpose is to be the man user's primary group and nothing in
+	  cache directories is group-writeable.
+
+	  Maintainers of distribution packagers should take care to review
+	  their installation rules in light of this change.
+
+	  As far as I know this has no CVE ID, but it is described here:
+
+	    http://www.halfdog.net/Security/2015/SetgidDirectoryPrivilegeEscalation/
+
+	o Fix manual page translation infrastructure to render tables
+	  correctly with po4a 0.47.
+
+	Improvements:
+	-------------
+
+	o man now understands the <page>.<section> form on its command line,
+	  so for example 'man chmod.2' is now the same as 'man 2 chmod'.
+	  (Contributed by Mihail Konev.)
+
+	o The owner of cache files is now configured separately from whether
+	  man and mandb are installed setuid, using the
+	  --enable-cache-owner[=USER] option.
+
+man-db 2.7.5 (6 November 2015)
+==============================
 
 Major changes since man-db 2.7.4:
 
