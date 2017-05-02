@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.7.6.1
-Release  : 18
+Release  : 19
 URL      : http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz
 Source0  : http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz
 Source99 : http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz.sig
