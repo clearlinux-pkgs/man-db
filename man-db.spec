@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.7.6.1
-Release  : 19
+Release  : 20
 URL      : http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz
 Source0  : http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz
 Source99 : http://nongnu.askapache.com/man-db/man-db-2.7.6.1.tar.xz.sig
@@ -36,6 +36,7 @@ BuildRequires : pkg-config-dev
 BuildRequires : util-linux
 BuildRequires : zlib-dev
 Patch1: stateless.patch
+Patch2: cve-2015-1336.nopatch
 
 %description
 ========================================
@@ -80,7 +81,6 @@ doc components for the man-db package.
 Summary: lib components for the man-db package.
 Group: Libraries
 Requires: man-db-data
-Requires: man-db-config
 
 %description lib
 lib components for the man-db package.
@@ -99,8 +99,15 @@ locales components for the man-db package.
 %patch1 -p1
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1492030736
+export SOURCE_DATE_EPOCH=1507754564
+export CFLAGS="$CFLAGS -fstack-protector-strong "
+export FCFLAGS="$CFLAGS -fstack-protector-strong "
+export FFLAGS="$CFLAGS -fstack-protector-strong "
+export CXXFLAGS="$CXXFLAGS -fstack-protector-strong "
 %reconfigure --disable-static --disable-setuid
 make V=1  %{?_smp_mflags}
 
@@ -108,11 +115,11 @@ make V=1  %{?_smp_mflags}
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1492030736
+export SOURCE_DATE_EPOCH=1507754564
 rm -rf %{buildroot}
 %make_install
 %find_lang man-db-gnulib
