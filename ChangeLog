@@ -1,3 +1,523 @@
+2018-02-04  Colin Watson  <cjwatson@debian.org>
+
+	Allow ioctl (..., TCGETS, ...)
+
+	* lib/sandbox.c (make_seccomp_filter): Allow ioctl (..., TCGETS, ...) in
+	non-permissive mode (ioctl in general is already allowed in permissive
+	mode).
+
+2018-02-04  Mario Blättermann  <mario.blaettermann@gmail.com>
+
+	Update German manual page translation
+
+	* man/po4a/po/de.po: Update from Translation Project.
+
+2018-02-03  Rafael Fontenelle  <rafaelff@gnome.org>
+
+	Update Brazilian Portuguese translations
+
+	* po/pt_BR.po, man/po4a/po/pt_BR.po: Update from Translation Project.
+	* man/THANKS: Update translator email address.
+
+2018-01-27  Joe Hansen  <joedalton2@yahoo.dk>
+
+	Update Danish manual page translation
+
+	* man/po4a/po/da.po: Update from Translation Project.
+
+2018-01-25  Mario Blättermann  <mario.blaettermann@gmail.com>
+
+	Update German manual page translation
+
+	* man/po4a/po/de.po: Update from Translation Project.
+
+2018-01-23  Yuri Kozlov  <yuray@komyakino.ru>
+
+	Update Russian translations
+
+	* po/ru.po, man/po4a/po/ru.po: Update from Translation Project.
+
+2018-01-23  Boyuan Yang  <073plan@gmail.com>
+
+	Update Simplified Chinese manual page translation
+
+	* man/po4a/po/zh_CN.po: Update from Translation Project.
+
+2018-01-23  Sebastian Rasmussen  <sebras@gmail.com>
+
+	Update Swedish manual page translation
+
+	* man/po4a/po/sv.po: Update from Translation Project.
+
+2018-01-23  Rafael Fontenelle  <rffontenelle@gmail.com>
+
+	Update Brazilian Portuguese manual page translation
+
+	* man/po4a/po/pt_BR.po: Update from Translation Project.
+
+2018-01-22  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.8.0-pre2.
+
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update.
+
+2018-01-21  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.8.0-pre1.
+
+2018-01-16  Colin Watson  <cjwatson@debian.org>
+
+	Minor style cleanups
+
+	* src/man.c (sh_lang_first_word, main): Minor style cleanups.
+
+2018-01-16  Colin Watson  <cjwatson@debian.org>
+
+	NEWS: Document previous commit.
+
+2018-01-16  Neven Sajko  <nsajko@gmail.com>
+
+	Add fallback pager if the compile-time default is not executable
+
+	A problem with man-db's man is that in the case of the user giving no
+	configuration via conf files, argv, or environment variables; man
+	defaults to less as pager (PAGER); but less may not be present on the
+	system. Sure, other pagers may be selected in aforementioned ways, but
+	then the defaults are overridden, making that unsuitable for
+	install-time configuration.
+
+	This patch makes man check (if that becomes relevant) if PAGER is
+	executable, further defaulting to cat (which is basically ubiquitous,
+	being in original Unix, POSIX, and GNU Coreutils) if it is not. Thus
+	the poor beginner Unix users without less installed will be able to
+	get man pages.
+
+	* src/man.c (sh_lang_first_word): New function.
+	(main): Skip configured pager if it is not executable.
+	* man/man1/man.man1 (Controlling formatted output, ENVIRONMENT):
+	Document fallback to cat.
+	* man/replace.sin.in: Substitute %cat%.
+
+2018-01-16  Colin Watson  <cjwatson@debian.org>
+
+	Fix a segfault in 'man -D --help'
+
+	Reported by Jiri Kucera.
+
+	* src/man.c (init_html_pager): New function.
+	(parse_opt): Call init_html_pager rather than setting html_pager to
+	NULL.
+	(help_filter): Assert that browser is non-NULL.
+	(main): Call init_html_pager rather than doing the same thing directly.
+	* NEWS: Document this.
+
+2018-01-03  Colin Watson  <cjwatson@debian.org>
+
+	Update Simplified Chinese manual page translation
+
+	* man/po4a/po/zh_CN.po: Update from Translation Project (trivial).
+
+2018-01-03  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade config.guess/config.sub
+
+	* build-aux/config.guess: Upgrade to 2017-11-07.
+	* build-aux/config.sub: Upgrade to 2017-11-23.
+
+2018-01-03  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Cope with missing CONFIG_SECCOMP_FILTER
+
+	* lib/sandbox.c (gripe_seccomp_filter_unavailable): New function.
+	(can_load_seccomp): Return early if seccomp filtering has already been
+	detected as unavailable.
+	(sandbox_load): If seccomp_load returns an EINVAL error, assume that the
+	running kernel doesn't support seccomp filtering and emit a debugging
+	message rather than failing.
+
+2018-01-03  Colin Watson  <cjwatson@debian.org>
+
+	Allow sync_file_range2 syscall
+
+	* lib/sandbox.c (make_seccomp_filter): Add sync_file_range2.
+
+2018-01-03  Colin Watson  <cjwatson@debian.org>
+
+	Fix seccomp sandbox on Linux/ARM
+
+	* lib/sandbox.c (make_seccomp_filter): Add arm_fadvise64_64 and
+	arm_sync_file_range.
+
+2017-12-03  Colin Watson  <cjwatson@debian.org>
+
+	Use more conventional bullets in documentation
+
+	* docs/INSTALL.quick, NEWS, README: Use "*" for bullet points instead of
+	"o".
+
+2017-12-03  Colin Watson  <cjwatson@debian.org>
+
+	Confine most untrusted data handling using seccomp
+
+	Fixes Debian bug #877199.
+
+	* configure.ac: Require libpipeline >= 1.5.0.  Call MAN_LIBSECCOMP.
+	* docs/INSTALL.quick: Bump minimum libpipeline version to 1.5.0.  List
+	libseccomp as recommended.
+	* lib/Makefile.am (libman_la_CPPFLAGS): Add $(libseccomp_CFLAGS).
+	(libman_la_SOURCES): Add sandbox.c and sandbox.h.
+	(libman_la_LDFLAGS): Add $(libseccomp_LIBS).
+	* lib/sandbox.c: New file.
+	* lib/sandbox.h: New file.
+	* m4/man-libseccomp.m4: New file.
+
+	* src/man.c (set_term): Check that process ID matches original before
+	calling tcsetattr.
+	(get_term): Record original process ID to work around an arguable bug in
+	pipecmd_exec.
+
+	* src/lexgrog_test.c (main), src/man.c (main), src/manconv_main.c
+	(main), src/mandb.c (main), src/zsoelim_main.c (main): Initialise
+	sandbox.
+
+	* lib/decompress.c (decompress_open, decompress_fdopen): Attach sandbox
+	to decompression commands.
+	* src/lexgrog.l (find_name): Attach sandbox to 'col'.
+	* src/man.c (add_col): Attach sandbox to 'col'.
+	(make_roff_command): Attach sandbox to 'zsoelim' and to groff-related
+	programs.
+	(add_output_iconv): Attach sandbox to 'iconv'.
+	(make_display_command): Attach sandbox to 'tr'.
+	(open_cat_stream, display_catman): Attach sandbox to compression
+	commands.
+	* src/manconv_client.c (add_manconv): Attach sandbox to manconv_stdin.
+	* src/straycats.c (check_for_stray): Attach sandbox to 'col'.
+	* src/whatis.c (use_grep): Attach sandbox to 'grep'.
+
+	* src/accessdb.c, src/catman.c, src/globbing_test.c, src/manpath.c:
+	Define stub sandbox variable.
+
+	* docs/NEWS: Document this.
+
+2017-12-02  Colin Watson  <cjwatson@debian.org>
+
+	Document more installation requirements
+
+	* docs/INSTALL.quick: List a database library as required, and zlib as
+	recommended.
+
+2017-11-22  Colin Watson  <cjwatson@debian.org>
+
+	Remove Easter egg entirely
+
+	Six years is a reasonable shelf life for a joke, but I think its time
+	has passed now.
+
+	* src/man.c (main): Remove Easter egg.
+
+2017-11-21  Philipp Gesang  <phg@phi-gamma.net>
+
+	Add section 0 to defaults
+
+	m4/man-arg-sections.m4: Add 0 (zero) to the default list of sections as
+	advertised in ``configure --help``.
+
+	Cf. commit f3739b9bbde27c702c911ce8a511a499705a25f7
+
+2017-11-21  Colin Watson  <cjwatson@debian.org>
+
+	Stop Easter egg interfering with non-error cases
+
+	* src/man.c (main): Restrict Easter egg to the case where 'man' is run
+	without any options or arguments at all (which isn't useful for anything
+	else), not 'man -w' (which is).
+
+	https://unix.stackexchange.com/questions/405783/why-does-man-print-gimme-gimme-gimme-at-0030
+
+2017-11-21  Colin Watson  <cjwatson@debian.org>
+
+	Fix formatting error in Simplified Chinese translation
+
+	* man/po4a/po/zh_CN.po: Correct formatting of exit(3tcl) references.
+
+2017-11-16  Boyuan Yang  <073plan@gmail.com>
+
+	Update Simplified Chinese translations
+
+	* po/zh_CN.po, man/po4a/po/zh_CN.po: Update from Translation Project.
+	* man/THANKS: Add translator credit.
+
+2017-11-13  Colin Watson  <cjwatson@debian.org>
+
+	Fix docs for minimum libpipeline requirement
+
+	* docs/INSTALL.quick: Bump minimum libpipeline version to 1.4.0.
+
+2017-07-18  Colin Watson  <cjwatson@debian.org>
+
+	Fix formatting error in Turkish translation
+
+	* man/po4a/po/tr.po: Translate "\\e-" as itself rather than as "\\(e-".
+
+2017-07-16  Colin Watson  <cjwatson@debian.org>
+
+	Improve --with-systemdtmpfilesdir default
+
+	* m4/man-arg-systemdtmpfilesdir.m4: Get tmpfiles directory location from
+	pkg-config.
+	* configure.ac: Call PKG_PROG_PKG_CONFIG early to avoid problems with
+	conditional use of PKG_* macros.
+
+2017-07-11  Colin Watson  <cjwatson@debian.org>
+
+	Add Turkish manual page translation
+
+	* man/po4a/po/tr.po: New from Translation Project (thanks, Volkan Gezer
+	and Mesutcan Kurt).
+	* configure.ac (AC_CONFIG_FILES): Add man/tr/Makefile.
+	* man/LINGUAS.po4a: Add tr.
+	* man/Makefile.am (DIST_SUBDIRS): Add tr.
+	* man/tr/Makefile.am, man/tr/translator.add: New files.
+	* man/po4a/Makefile.am (POFILES): Add po/tr.po.
+	* man/po4a/po4a.cfg (po4a_langs): Add tr.
+	* man/THANKS: Add translator credit.
+	* .gitignore: Add man/tr/man1, man/tr/man5, and man/tr/man8.
+
+2017-07-10  Colin Watson  <cjwatson@debian.org>
+
+	* NEWS: Document changes since 2.7.6.1.
+
+2017-07-10  Colin Watson  <cjwatson@debian.org>
+
+	gnulib: Import memmem module
+
+	Needed to make the previous commit portable.
+
+2017-07-10  Colin Watson  <cjwatson@debian.org>
+
+	Fix preprocessor handling after insertions
+
+	If man has added prefixes to a page to handle such things as disabling
+	hyphenation, then it also needs to take account of that when looking for
+	a preprocessor line at the start of the page.
+
+	Reported by Bjarni Ingi Gislason.  Fixes Debian bug #867857.
+
+	* src/man.c (get_preprocessors_from_file): Skip over as many blocks
+	ending with an .lf macro as there are prefixes.
+	(get_preprocessors): Pass the number of prefixes through to
+	get_preprocessors_from_file.
+	(make_roff_command): Take pp_string as an argument rather than
+	dbfilters; callers should now call get_preprocessors themselves.
+	(display): Rename seq_ncmds to prefixes.  Call get_preprocessors before
+	calling make_roff_command.
+
+2017-07-10  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade to Automake 1.15.1.
+
+2017-07-10  Colin Watson  <cjwatson@debian.org>
+
+	Handle \(en escapes in NAME section
+
+	* src/lexgrog.l (MAN_NAME): Treat "\(en" as another synonym for "\-",
+	and thus as a separator.
+
+2017-04-08  Volkan Gezer  <volkangezer@gmail.com>
+
+	Update Turkish translation
+
+	* po/tr.po: Update from Translation Project.
+
+2017-04-04  Volkan Gezer  <volkangezer@gmail.com>
+
+	Add Turkish translation
+
+	* po/tr.po: New from Translation Project.
+	* po/LINGUAS: Add tr.
+	* man/THANKS: Add translator credit.
+
+2017-01-29  Felipe Castro  <fefcas@gmail.com>
+
+	Update Esperanto translation
+
+	* po/eo.po: Update from Translation Project.
+
+2017-01-07  Sebastian Rasmussen  <sebras@gmail.com>
+
+	Update Swedish translation
+
+	* po/sv.po: Update from Translation Project.
+
+2017-01-04  Colin Watson  <cjwatson@debian.org>
+
+	Add Brazilian Portuguese manual page translation
+
+	* man/po4a/po/pt_BR.po: New from Translation Project (thanks, Rafael
+	Fontenelle).
+	* configure.ac (AC_CONFIG_FILES): Add man/pt_BR/Makefile.
+	* man/LINGUAS.po4a: Add pt_BR.
+	* man/Makefile.am (DIST_SUBDIRS): Add pt_BR.
+	* man/pt_BR/Makefile.am, man/pt_BR/translator.add: New files.
+	* man/po4a/Makefile.am (POFILES): Add po/pt_BR.po.
+	* man/po4a/po4a.cfg (po4a_langs): Add pt_BR.
+	* man/THANKS: Add translator credit.
+	* .gitignore: Add man/pt_BR/man1, man/pt_BR/man5, and man/pt_BR/man8.
+
+2016-12-28  Sebastian Rasmussen  <sebras@gmail.com>
+
+	Update Swedish manual page translation
+
+	* man/po4a/po/sv.po: Update from Translation Project.
+
+2016-12-23  David Prévot  <david@tilapin.org>
+
+	Update French manual page translation
+
+	* man/po4a/po/fr.po: Update from Translation Project.
+
+2016-12-23  David Prévot  <david@tilapin.org>
+
+	Update French translation
+
+	* po/fr.po: Update from Translation Project.
+
+2016-12-22  Robert Luberda  <robert@debian.org>
+
+	Update Polish manual page translation
+
+	* man/po4a/po/pl.po: Update from Translation Project.
+
+2016-12-22  Robert Luberda  <robert@debian.org>
+
+	Update Polish translation
+
+	* po/pl.po: Update from Translation Project.
+
+2016-12-19  Colin Watson  <cjwatson@debian.org>
+
+	Add Serbian manual page translation
+
+	* man/po4a/po/sr.po: New from Translation Project (thanks, Мирослав
+	Николић).
+	* configure.ac (AC_CONFIG_FILES): Add man/sr/Makefile.
+	* man/LINGUAS.po4a: Add sr.
+	* man/Makefile.am (DIST_SUBDIRS): Add sr.
+	* man/sr/Makefile.am, man/sr/translator.add: New files.
+	* man/po4a/Makefile.am (POFILES): Add po/sr.po.
+	* man/po4a/po4a.cfg (po4a_langs): Add sr.
+	* man/THANKS: Add translator credit.
+	* .gitignore: Add man/sr/man1, man/sr/man5, and man/sr/man8.
+
+2016-12-19  Мирослав Николић  <miroslavnikolic@rocketmail.com>
+
+	Update Serbian translation
+
+	* po/sr.po: Update from Translation Project.
+
+2016-12-13  Joe Hansen  <joedalton2@yahoo.dk>
+
+	Update Danish manual page translation
+
+	* man/po4a/po/da.po: Update from Translation Project.
+
+2016-12-13  Colin Watson  <cjwatson@debian.org>
+
+	Generate tmpfiles snippet based on cache owner
+
+	man-db.conf should honour --enable-cache-owner rather than hardcoding
+	"man".
+
+	* init/systemd/man-db.conf: Rename to ...
+	* init/systemd/man-db.conf.in: ... this.  Replace "man" with
+	"@man_owner@".
+	* init/systemd/Makefile.am: Generate man-db.conf at build time.
+	* .gitignore: Add init/systemd/man-db.conf.
+
+2016-12-13  Colin Watson  <cjwatson@debian.org>
+
+	Fix locale macro loading for Chinese
+
+	The intent was always that we should load the macro file corresponding
+	to just the language part of the page's locale, and the debug output
+	agreed with this, but the actual implementation did not.  Fix this.
+
+	See: https://savannah.gnu.org/bugs/?44941
+
+	* src/man.c (display): Pass bits.language rather than page_lang to
+	locale_macros.  Adjust memory allocation.
+
+2016-12-13  Colin Watson  <cjwatson@debian.org>
+
+	Rename SECURE_MAN_UID to MAN_OWNER
+
+	The latter had always been defined to the former anyway, and now that
+	the cache owner can be changed without actually installing setuid the
+	latter is more descriptive.
+
+	* m4/man-arg-cache-owner.m4: Define MAN_OWNER rather than
+	SECURE_MAN_UID.  Update all users.
+	* include/manconfig.h.in (MAN_OWNER): Remove definition.
+
+2016-12-13  Colin Watson  <cjwatson@debian.org>
+
+	Mark some parts of .TH sections as untranslatable
+
+	* man/po4a/Locale/Po4a/Manext.pm (translate): Don't translate anything
+	matching /^%.*%$/ or /^[A-Z]+$/ in .TH sections.
+	* man/po4a/po/man-db-manpages.pot, man/po4a/po/*.po: Update.
+
+2016-12-13  Tianze Wang  <zwpwjwtz@126.com>
+
+	Update Simplified Chinese manual page translation
+
+	* man/po4a/po/zh_CN.po: Update from Translation Project.
+	* man/THANKS: Update.
+
+2016-12-13  Trần Ngọc Quân  <vnwildman@gmail.com>
+
+	Update Vietnamese translation
+
+	* po/vi.po: Update from Translation Project.
+
+2016-12-13  Colin Watson  <cjwatson@debian.org>
+
+	Correct syntax of Danish manual page translation
+
+	* man/po4a/po/da.po: Fix a couple of font specifications.
+
+2016-12-13  Rafael Fontenelle  <rffontenelle@gmail.com>
+
+	Update Brazilian Portuguese translation
+
+	* po/pt_BR.po: Update from Translation Project.
+	* man/THANKS: Update.
+
+2016-12-13  Joe Hansen  <joedalton2@yahoo.dk>
+
+	Update Danish manual page translation
+
+	* man/po4a/po/da.po: Update from Translation Project.
+
+2016-12-12  Joe Hansen  <joedalton2@yahoo.dk>
+
+	Update Danish translation
+
+	* po/da.po: Update from Translation Project.
+
+2016-12-12  Mario Blättermann  <mario.blaettermann@gmail.com>
+
+	Update German manual page translation
+
+	* man/po4a/po/de.po: Update from Translation Project.
+
+2016-12-12  Mario Blättermann  <mario.blaettermann@gmail.com>
+
+	Update German translation
+
+	* po/de.po: Update from Translation Project.
+	* man/THANKS: Update.
+
 2016-12-12  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.7.6.1.
