@@ -1,3 +1,142 @@
+2018-02-09  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.8.1.
+
+2018-02-09  Colin Watson  <cjwatson@debian.org>
+
+	Use HTTPS URLs where possible
+
+	* Makefile.am, NEWS, README, docs/HACKING, docs/INSTALL.quick,
+	lib/sandbox.c, manual/misc.me, src/check_mandirs.c, src/man.c,
+	src/manconv.c, src/tests/man-1, src/tests/man-2, src/tests/mandb-2,
+	src/tests/mandb-4, src/tests/mandb-5, src/tests/zsoelim-1: Replace
+	http:// links with https:// equivalents.
+	* docs/HACKING: Replace git:// link with an https:// equivalent.
+
+2018-02-09  Colin Watson  <cjwatson@debian.org>
+
+	Chase some redirects
+
+	* NEWS: Link to https://bazaar.canonical.com/ rather than
+	http://bazaar-vcs.org/.
+	* man/fr/translator.add: Link to https://po4a.org/ rather than
+	http://po4a.alioth.debian.org/.
+
+2018-02-08  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Allow mremap
+
+	* lib/sandbox.c (make_seccomp_filter): Allow mremap, which may be used
+	by iconv when reading files, depending on libc configuration.
+	* NEWS: Document this.
+
+2018-02-07  Lars Wendler  <polynomial-c@gentoo.org>
+
+	Change libseccomp logic to not be automagic only
+
+	Introduce --without-libseccomp configure option so that users can
+	disable seccomp even if libseccomp is available on the system.
+
+	The default is unchanged from before this patch.  If no
+	--with(out)-libseccomp has been given on the command line, the macro
+	looks for presence of libseccomp and uses that if found.
+
+	* m4/man-libseccomp.m4: Guard pkg-config test with a command-line
+	option.
+
+2018-02-07  Colin Watson  <cjwatson@debian.org>
+
+	* NEWS: Document changes since 2.8.0.
+
+2018-02-07  Colin Watson  <cjwatson@debian.org>
+
+	Reduce number of MAN_OWNER ifdefs
+
+	* lib/security.c (init_security, running_setuid): Define
+	unconditionally, with stub behaviour if MAN_OWNER is undefined.
+	* lib/security.h (get_man_owner): Only declare prototype if MAN_OWNER is
+	defined.
+	* src/check_mandirs.c (chown_if_possible) [!MAN_OWNER]: Mark path
+	argument as unused.
+	* src/lexgrog_test.c (main): Call init_security unconditionally.
+	* src/man.c (main): Likewise.
+	* src/manconv_client.c (manconv_pre_exec): Define unconditionally.
+	(add_manconv): Simplify, since running_setuid is now always defined.
+	* src/mandb.c (main): Call init_security unconditionally.  Use
+	get_man_owner rather than equivalent inline code.
+	* src/manp.c (get_def): Define unconditionally.
+	* src/manp.h (get_def): Drop macro alternative.
+
+2018-02-07  Colin Watson  <cjwatson@debian.org>
+
+	Fix manconv under seccomp when man is setuid
+
+	We must drop privileges before loading the sandbox.
+
+	Reported by Lars Wendler.
+
+	* src/manconv_client.c (manconv_pre_exec): New function.
+	(manconv_stdin): Move setuid hack to ...
+	(add_manconv): ... here, now implemented using a custom pre-exec hook.
+	We no longer have a fall-through if dropping privileges fails, since
+	that's now harder to do and wasn't really necessary in the first place.
+
+2018-02-07  Colin Watson  <cjwatson@debian.org>
+
+	Refactor do_system_drop_privs
+
+	Now that we have pipecmd_pre_exec, this can be simplified quite a bit.
+
+	* lib/security.c (drop_privs): New function.
+	(do_system_drop_privs_child, do_system_drop_privs): Remove.
+	* lib/security.h (drop_privs): Add prototype.
+	(do_system_drop_privs): Remove prototype.
+	* src/man.c (make_browser): Add drop_privs pre-exec hook to browser
+	command.
+	(format_display): Call browser using pipeline_run rather than
+	do_system_drop_privs, since it now has a pre-exec hook to drop
+	privileges.
+
+2018-02-07  Colin Watson  <cjwatson@debian.org>
+
+	Refactor sandbox attachment to be more composable
+
+	The sandbox interface now exposes the necessary load/free primitives,
+	and callers use them directly with pipecmd_pre_exec.  This allows the
+	sandbox to be composed with other pre-exec hooks.
+
+	* lib/sandbox.c (man_sandbox_op, sandbox_attach,
+	sandbox_attach_permissive): Remove.
+	(sandbox_load): Rename to ...
+	(_sandbox_load): ... this.
+	(sandbox_load, sandbox_load_permissive): New functions.
+	(sandbox_free): Expect a man_sandbox * rather than a man_sandbox_op *.
+	* lib/sandbox.h: Update prototypes.
+
+	* lib/decompress.c (decompress_open, decompress_fdopen): Update sandbox
+	attachment calls.
+	* src/lexgrog.l (find_name): Likewise.
+	* src/man.c (add_col, make_roff_command, add_output_iconv,
+	make_display_command, open_cat_stream, display_catman): Likewise.
+	* src/manconv_client.c (add_manconv): Likewise.
+	* src/straycats.c (check_for_stray): Likewise.
+	* src/whatis.c (use_grep): Likewise.
+
+2018-02-07  Colin Watson  <cjwatson@debian.org>
+
+	* NEWS: Fix typo in 2.6.5 notes
+
+2018-02-05  Colin Watson  <cjwatson@debian.org>
+
+	Fix seccomp sandbox build on Linux/POWER
+
+	* lib/sandbox.c [HAVE_LIBSECCOMP]: Include <termios.h>, since some
+	architectures need this for TCGETS as well as <sys/ioctl.h>.
+
+2018-02-04  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.8.0.
+
 2018-02-04  Colin Watson  <cjwatson@debian.org>
 
 	Allow ioctl (..., TCGETS, ...)

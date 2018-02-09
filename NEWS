@@ -1,3 +1,23 @@
+man-db 2.8.1 (9 February 2018)
+==============================
+
+Major changes since man-db 2.8.0:
+
+	Fixes:
+	------
+
+	* Fix seccomp sandbox build on Linux/POWER.
+
+	* Fix manconv execution under seccomp when man is installed setuid.
+
+	* Make seccomp sandbox allow mremap (used by iconv, for example).
+
+	Improvements:
+	-------------
+
+	* configure now has a --without-libseccomp option to disable the use
+	  of seccomp even if the library is available.
+
 man-db 2.8.0 (4 February 2018)
 ==============================
 
@@ -83,7 +103,7 @@ Major changes since man-db 2.7.5:
 
 	  As far as I know this has no CVE ID, but it is described here:
 
-	    http://www.halfdog.net/Security/2015/SetgidDirectoryPrivilegeEscalation/
+	    https://www.halfdog.net/Security/2015/SetgidDirectoryPrivilegeEscalation/
 
 	* Fix manual page translation infrastructure to render tables
 	  correctly with po4a 0.47.
@@ -304,7 +324,7 @@ man-db 2.6.6 (23 January 2014)
 
 Major changes since man-db 2.6.5:
 
-	man-db is now revision-controlled using git (http://git-scm.com/).
+	man-db is now revision-controlled using git (https://git-scm.com/).
 	See docs/HACKING for the location of the repository.
 
 	Fixes:
@@ -341,7 +361,7 @@ Major changes since man-db 2.6.4:
 	* man's --warnings option works again on systems with versions of
 	  groff that support it (broken in 2.6.4).
 
-	* man automatically falls back to C.UTF-8 and then en_GB.UTF-8 if
+	* man automatically falls back to C.UTF-8 and then en_US.UTF-8 if
 	  trying to find a UTF-8 locale on a system without
 	  /usr/share/i18n/SUPPORTED.
 
@@ -584,7 +604,7 @@ Major changes since man-db 2.5.7:
 	* libintl is no longer shipped with man-db.  If your system does not
 	  already have GNU libintl installed and you want man-db's messages
 	  to be translated, then please install GNU libintl separately
-	  (http://www.gnu.org/software/gettext/).
+	  (https://www.gnu.org/software/gettext/).
 
 	* Warnings about unrecognised locales are now suppressed if the
 	  DPKG_RUNNING_VERSION environment variable is set (i.e. man-db is
@@ -1081,8 +1101,8 @@ man-db 2.4.4 (12 February 2007)
 Major changes since man-db 2.4.3:
 
 	man-db is now revision-controlled using bzr
-	(http://bazaar-vcs.org/). See docs/HACKING for the location of the
-	archive (including all CVS history, imported by Canonical).
+	(https://bazaar.canonical.com/). See docs/HACKING for the location
+	of the archive (including all CVS history, imported by Canonical).
 
 	Fixes:
 	------
@@ -1447,7 +1467,7 @@ Major changes since man_db-2.3.19:
 	* The -H (--html) option to man is now compiled in by default, and
 	  supports the BROWSER specification (as documented at
 	  http://www.tuxedo.org/~esr/BROWSER/ and amended at
-	  http://www.dwheeler.com/browse/secure_browser.html).
+	  https://www.dwheeler.com/browse/secure_browser.html).
 
 man_db-2.3.19 (5 July 2001)
 ===========================
