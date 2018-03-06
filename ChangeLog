@@ -1,3 +1,101 @@
+2018-02-28  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.8.2.
+
+2018-02-28  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Handle qemu-user returning EFAULT
+
+	Fixes Debian bug #891109.
+
+	* lib/sandbox.c (_sandbox_load): Interpret EFAULT from seccomp_load as
+	meaning that seccomp is unavailable, since this can be returned by some
+	versions of qemu-user.
+	* NEWS: Document this.
+
+2018-02-28  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Add some more ESET affordances
+
+	* lib/sandbox.c (make_seccomp_filter): If libesets_pac.so is preloaded,
+	then allow some shared memory calls and checking for the existence of
+	other processes.
+
+2018-02-25  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Work around snoopy
+
+	Fixes Debian bug #890861.
+
+	* lib/sandbox.c (search_ld_preload): Cache /etc/ld.so.preload contents
+	between calls.
+	(make_seccomp_filter): Allow some socket-related system calls if
+	libsnoopy.so is preloaded.
+
+2018-02-25  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Generalise libesets_pac.so check slightly
+
+	* lib/sandbox.c (make_seccomp_filter): LD_PRELOAD or /etc/ld.so.preload
+	can just contain "libesets_pac.so" without an explicit path, so make the
+	search slightly more permissive.
+
+2018-02-20  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Handle /etc/ld.so.preload
+
+	At least ESET File Security may be configured using /etc/ld.so.preload
+	rather than the LD_PRELOAD environment variable, so unfortunately we
+	need to check that too.
+
+	* lib/sandbox.c (search_ld_preload): New function, handling both
+	LD_PRELOAD and /etc/ld.so.preload.
+	(can_load_seccomp, make_seccomp_filter): Use search_ld_preload.
+
+2018-02-19  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Work around ESET File Security
+
+	This is a proprietary antivirus program, so this is only a best guess
+	from strace output.  The choices are to disable the sandbox entirely or
+	to allow a few socket-related system calls if this antivirus program is
+	detected, and the latter is probably slightly better.
+
+	Reported by John Sivak.
+
+	* lib/sandbox.c (make_seccomp_filter): If LD_PRELOAD contains the
+	substring "/libesets_pac.so", then allow some socket-related system
+	calls so that the preload wrapper can talk to its daemon.
+	* NEWS: Document this.
+
+2018-02-19  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Allow ioctl(fd, TIOCGWINSZ)
+
+	Patch from the anonymous reporter of
+	https://savannah.nongnu.org/bugs/?53183 (though I think is obvious for
+	copyright purposes given knowledge of the failing system call).
+
+	Fixes Savannah bug #53183 (maybe).
+
+	* lib/sandbox.c (make_seccomp_filter): Allow ioctl(fd, TIOCGWINSZ).
+	* NEWS: Document this.
+
+2018-02-14  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Allow kill/tgkill for current process
+
+	xz is multithreaded, so the threading library may need to use tgkill to
+	pass signals between threads, for example when it receives SIGPIPE.
+
+	Fixes Savannah bug #53143.
+
+	* lib/sandbox.c (SC_ALLOW, SC_ALLOW_ARG_1, SC_ALLOW_ARG_2): Move macro
+	definitions out of make_seccomp_filter.
+	(adjust_seccomp_filter): New function.
+	(sandbox_load): Call adjust_seccomp_filter.
+	* NEWS: Document this.
+
 2018-02-09  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.8.1.

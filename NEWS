@@ -1,3 +1,30 @@
+man-db 2.8.2 (28 February 2018)
+===============================
+
+Major changes since man-db 2.8.1:
+
+	Fixes:
+	------
+
+	* Make seccomp sandbox allow kill and tgkill when the signal is
+	  directed at the current process or one of its threads; this is
+	  needed by xz.
+
+	* Make seccomp sandbox allow ioctl(fd, TIOCGWINSZ), since that's used
+	  by musl.
+
+	* Work around the proprietary "ESET File Security" antivirus program in
+	  seccomp sandbox: if this is in use then we need to allow some
+	  socket-related system calls.
+
+	* Work around the "snoopy" execve() wrapper and logger in seccomp
+	  sandbox: if this is in use then we need to allow some
+	  socket-related system calls.
+
+	* Interpret EFAULT from seccomp_load as meaning that seccomp is
+	  unavailable, since this can be returned by some versions of
+	  qemu-user.
+
 man-db 2.8.1 (9 February 2018)
 ==============================
 

@@ -1,4 +1,3 @@
-Configure miss: whether C compiler handles -Werror -Wunknown-warning-option
 Configure miss: www-browser
 Configure miss: lynx
 Configure miss: elinks
@@ -15,7 +14,7 @@ Configure miss: linewrap.h presence
 Configure miss: linewrap.h
 Configure miss: whether C symbols are prefixed with underscore at the linker level
 Configure miss: whether getcwd aborts when 4k < cwd_length < 16k
-Configure miss: whether glob lists broken symlinks
+Configure miss: GNU glob interface version 1
 Configure miss: ioctl with POSIX signature
 Configure miss: working nanosleep
 Configure miss: po4a
