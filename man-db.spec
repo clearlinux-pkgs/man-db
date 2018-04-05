@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x393587D97D86500B (cjwatson@debian.org)
 #
 Name     : man-db
-Version  : 2.8.2
-Release  : 24
-URL      : http://nongnu.askapache.com/man-db/man-db-2.8.2.tar.xz
-Source0  : http://nongnu.askapache.com/man-db/man-db-2.8.2.tar.xz
-Source99 : http://nongnu.askapache.com/man-db/man-db-2.8.2.tar.xz.asc
+Version  : 2.8.3
+Release  : 25
+URL      : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
+Source0  : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
+Source99 : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz.asc
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0 GPL-2.0+ GPL-3.0+ LGPL-2.1
@@ -33,6 +33,7 @@ BuildRequires : libtool
 BuildRequires : libtool-dev
 BuildRequires : m4
 BuildRequires : pkg-config-dev
+BuildRequires : python3-dev
 BuildRequires : util-linux
 BuildRequires : zlib-dev
 Patch1: stateless.patch
@@ -95,7 +96,7 @@ locales components for the man-db package.
 
 
 %prep
-%setup -q -n man-db-2.8.2
+%setup -q -n man-db-2.8.3
 %patch1 -p1
 
 %build
@@ -103,7 +104,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1520311429
+export SOURCE_DATE_EPOCH=1522951535
 export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
 export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
 export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
@@ -119,7 +120,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1520311429
+export SOURCE_DATE_EPOCH=1522951535
 rm -rf %{buildroot}
 %make_install
 %find_lang man-db-gnulib
@@ -176,9 +177,9 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/man-db/libman-2.8.2.so
+/usr/lib64/man-db/libman-2.8.3.so
 /usr/lib64/man-db/libman.so
-/usr/lib64/man-db/libmandb-2.8.2.so
+/usr/lib64/man-db/libmandb-2.8.3.so
 /usr/lib64/man-db/libmandb.so
 
 %files locales -f man-db-gnulib.lang -f man-db.lang

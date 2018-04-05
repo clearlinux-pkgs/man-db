@@ -1,3 +1,30 @@
+man-db 2.8.3 (5 April 2018)
+===========================
+
+Major changes since man-db 2.8.2:
+
+	Fixes:
+	------
+
+	* Make seccomp sandbox allow madvise, since that's used by lbzip2.
+
+	* Make seccomp sandbox allow kill and tgkill outright, since groff
+	  uses kill to pass on signals to its child processes.
+
+	* Make seccomp sandbox allow sibling architectures on
+	  x86/x86_64/x32, since people sometimes mix and match architectures
+	  there for performance reasons.
+
+	* Fix version check in locale macro loading to tolerate groff
+	  release candidates.
+
+	* man now only changes working directory in child processes, so
+	  never fails due to being unable to change back to its original
+	  working directory.
+
+	* accessdb, apropos, and lexgrog no longer emit spurious gettext
+	  headers in their --help output when localised.
+
 man-db 2.8.2 (28 February 2018)
 ===============================
 

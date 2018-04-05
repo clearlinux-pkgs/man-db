@@ -1,3 +1,129 @@
+2018-04-05  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.8.3.
+
+2018-04-05  Colin Watson  <cjwatson@debian.org>
+
+	Suppress spurious gettext headers in --help output
+
+	Some of man-db's commands have post-options help text but no pre-options
+	help text.  Unfortunately, the way this works in argp (separating the
+	two sections using a '\v' character) means that this results in argp
+	trying to translate the empty string, which produces gettext catalog
+	headers.  The easiest way to suppress this odd behaviour seems to be to
+	use a help filter function, so do that.
+
+	Reported by Rafael Fontenelle.
+
+	* src/accessdb.c (help_filter): Return NULL for ARGP_KEY_HELP_PRE_DOC.
+	* src/lexgrog_text.c (help_filter): New function.
+	(argp): Add help_filter.
+	* src/whatis.c (help_filter): New function.
+	(apropos_argp): Add help_filter.
+	* NEWS: Document this.
+
+2018-04-05  Colin Watson  <cjwatson@debian.org>
+
+	Fix compiler warnings on x32
+
+	tv_nsec is __syscall_slong_t == long long there, so we need a cast.
+
+	* libdb/db_lookup.c (dbprintf): Cast tv_nsec to long for %ld format.
+	* libdb/db_store.c (make_content): Likewise.
+	* src/check_mandirs.c (testmandirs, update_db): Likewise.
+	* src/man.c (maybe_update_file): Likewise.
+
+2018-04-05  Colin Watson  <cjwatson@debian.org>
+
+	Fix broken test
+
+	* src/tests/man-8: Fix expected output to account for recent change to
+	locale_macros.
+
+2018-04-05  Colin Watson  <cjwatson@debian.org>
+
+	man: Only change directory in child processes
+
+	This avoids failures due to being unable to change back to the original
+	working directory.
+
+	Fixes Debian bug #894792.
+
+	* gnulib/m4/gnulib-cache.m4 (gl_MODULES): Remove save-cwd.
+	* src/man.c (make_display_command): Remove now-unnecessary code to run
+	the pager in the original working directory.
+	(chdir_commands): New function.
+	(format_display): Change directory just for format_cmd and disp_cmd
+	rather than in-process.
+	(display): Change directory just for format_cmd rather than in-process.
+	(main): Remove now-unnecessary code to save and restore the current
+	working directory.
+	* NEWS: Document this.
+
+2018-04-04  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade config.guess/config.sub
+
+	* build-aux/config.guess: Upgrade to 2018-02-24.
+	* build-aux/config.sub: Upgrade to 2018-02-22.
+
+2018-04-01  Colin Watson  <cjwatson@debian.org>
+
+	Fix locale_macros version check for groff RCs
+
+	Thanks to Werner LEMBERG.
+
+	* src/man.c (locale_macros): Tolerate groff release candidates.
+	* NEWS: Document this.
+
+2018-03-30  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Allow sibling architectures on x86 etc.
+
+	Fixes Debian bug #891267.
+
+	* lib/sandbox.c (make_seccomp_filter): Allow sibling architectures on
+	x86/x86_64/x32.
+	* NEWS: Document this.
+
+2018-03-17  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Tighten up storage classes
+
+	* lib/sandbox.c (make_seccomp_filter, _sandbox_load): Declare as static.
+
+2018-03-17  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Allow kill and tgkill outright
+
+	This is unfortunate but unavoidable: groff uses kill to explicitly pass
+	on SIGPIPE to its child processes, and we can't do any more
+	sophisticated filtering in seccomp.
+
+	Based on a patch by Paul Wise.  Fixes Debian bug #892309.
+
+	* lib/sandbox.c (make_seccomp_filter): Allow kill and tgkill
+	unconditionally.
+	(adjust_seccomp_filter): Remove.
+	(_sandbox_load): Remove call to adjust_seccomp_filter.
+	* NEWS: Document this.
+
+2018-03-17  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Allow madvise
+
+	Reported by Tobias Klausmann.
+
+	* lib/sandbox.c (make_seccomp_filter): Allow madvise.
+	* NEWS: Document this.
+
+2018-03-02  Francisco Javier Serrador  <fserrador@gmail.com>
+
+	Update Spanish translation
+
+	* po/es.po: Update from Translation Project.
+	* man/THANKS: Add translator credit.
+
 2018-02-28  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.8.2.
