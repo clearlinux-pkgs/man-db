@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.8.3
-Release  : 26
+Release  : 27
 URL      : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
 Source0  : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
 Source99 : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz.asc
