@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.8.3
-Release  : 27
+Release  : 28
 URL      : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
 Source0  : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
 Source99 : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz.asc
@@ -33,7 +33,6 @@ BuildRequires : libtool
 BuildRequires : libtool-dev
 BuildRequires : m4
 BuildRequires : pkg-config-dev
-BuildRequires : python3-dev
 BuildRequires : util-linux
 BuildRequires : zlib-dev
 Patch1: stateless.patch
@@ -104,11 +103,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1522951535
-export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
-export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs "
+export SOURCE_DATE_EPOCH=1526011261
+export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 %reconfigure --disable-static --disable-setuid
 make  %{?_smp_mflags}
 
@@ -120,7 +119,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1522951535
+export SOURCE_DATE_EPOCH=1526011261
 rm -rf %{buildroot}
 %make_install
 %find_lang man-db-gnulib
