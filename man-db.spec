@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.8.3
-Release  : 29
+Release  : 30
 URL      : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
 Source0  : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
 Source99 : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz.asc
@@ -17,8 +17,8 @@ Requires: man-db-bin
 Requires: man-db-config
 Requires: man-db-lib
 Requires: man-db-data
-Requires: man-db-doc
 Requires: man-db-locales
+Requires: man-db-man
 Requires: groff
 BuildRequires : automake
 BuildRequires : automake-dev
@@ -48,6 +48,7 @@ Summary: bin components for the man-db package.
 Group: Binaries
 Requires: man-db-data
 Requires: man-db-config
+Requires: man-db-man
 
 %description bin
 bin components for the man-db package.
@@ -72,6 +73,7 @@ data components for the man-db package.
 %package doc
 Summary: doc components for the man-db package.
 Group: Documentation
+Requires: man-db-man
 
 %description doc
 doc components for the man-db package.
@@ -94,6 +96,14 @@ Group: Default
 locales components for the man-db package.
 
 
+%package man
+Summary: man components for the man-db package.
+Group: Default
+
+%description man
+man components for the man-db package.
+
+
 %prep
 %setup -q -n man-db-2.8.3
 %patch1 -p1
@@ -103,7 +113,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1526011261
+export SOURCE_DATE_EPOCH=1526225639
 export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -119,7 +129,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1526011261
+export SOURCE_DATE_EPOCH=1526225639
 rm -rf %{buildroot}
 %make_install
 %find_lang man-db-gnulib
@@ -149,6 +159,20 @@ rm -rf %{buildroot}
 %files data
 %defattr(-,root,root,-)
 /usr/share/defaults/mandb/man_db.conf
+
+%files doc
+%defattr(-,root,root,-)
+%doc /usr/share/doc/man\-db/*
+
+%files lib
+%defattr(-,root,root,-)
+/usr/lib64/man-db/libman-2.8.3.so
+/usr/lib64/man-db/libman.so
+/usr/lib64/man-db/libmandb-2.8.3.so
+/usr/lib64/man-db/libmandb.so
+
+%files man
+%defattr(-,root,root,-)
 /usr/share/man/es/man1/apropos.1
 /usr/share/man/es/man1/man.1
 /usr/share/man/es/man1/manpath.1
@@ -166,20 +190,17 @@ rm -rf %{buildroot}
 /usr/share/man/it/man8/accessdb.8
 /usr/share/man/it/man8/catman.8
 /usr/share/man/it/man8/mandb.8
-
-%files doc
-%defattr(-,root,root,-)
-%doc /usr/share/doc/man\-db/*
-%doc /usr/share/man/man1/*
-%doc /usr/share/man/man5/*
-%doc /usr/share/man/man8/*
-
-%files lib
-%defattr(-,root,root,-)
-/usr/lib64/man-db/libman-2.8.3.so
-/usr/lib64/man-db/libman.so
-/usr/lib64/man-db/libmandb-2.8.3.so
-/usr/lib64/man-db/libmandb.so
+/usr/share/man/man1/apropos.1
+/usr/share/man/man1/lexgrog.1
+/usr/share/man/man1/man.1
+/usr/share/man/man1/manconv.1
+/usr/share/man/man1/manpath.1
+/usr/share/man/man1/whatis.1
+/usr/share/man/man1/zsoelim.1
+/usr/share/man/man5/manpath.5
+/usr/share/man/man8/accessdb.8
+/usr/share/man/man8/catman.8
+/usr/share/man/man8/mandb.8
 
 %files locales -f man-db-gnulib.lang -f man-db.lang
 %defattr(-,root,root,-)
