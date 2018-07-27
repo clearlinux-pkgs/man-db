@@ -12,10 +12,13 @@ Configure miss: lzip
 Configure miss: linewrap.h usability
 Configure miss: linewrap.h presence
 Configure miss: linewrap.h
+Configure miss: crtdefs.h usability
+Configure miss: crtdefs.h presence
+Configure miss: crtdefs.h
 Configure miss: whether C symbols are prefixed with underscore at the linker level
 Configure miss: whether getcwd aborts when 4k < cwd_length < 16k
-Configure miss: GNU glob interface version 1
 Configure miss: ioctl with POSIX signature
+Configure miss: whether pthread_rwlock_rdlock prefers a writer to a reader
 Configure miss: working nanosleep
 Configure miss: po4a
 Configure miss: libseccomp

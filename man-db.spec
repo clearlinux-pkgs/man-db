@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x393587D97D86500B (cjwatson@debian.org)
 #
 Name     : man-db
-Version  : 2.8.3
-Release  : 30
-URL      : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
-Source0  : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz
-Source99 : http://nongnu.askapache.com/man-db/man-db-2.8.3.tar.xz.asc
+Version  : 2.8.4
+Release  : 32
+URL      : http://nongnu.askapache.com/man-db/man-db-2.8.4.tar.xz
+Source0  : http://nongnu.askapache.com/man-db/man-db-2.8.4.tar.xz
+Source99 : http://nongnu.askapache.com/man-db/man-db-2.8.4.tar.xz.asc
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0 GPL-2.0+ GPL-3.0+ LGPL-2.1
@@ -17,6 +17,7 @@ Requires: man-db-bin
 Requires: man-db-config
 Requires: man-db-lib
 Requires: man-db-data
+Requires: man-db-license
 Requires: man-db-locales
 Requires: man-db-man
 Requires: groff
@@ -26,6 +27,7 @@ BuildRequires : db-dev
 BuildRequires : flex
 BuildRequires : gdbm-dev
 BuildRequires : gettext-bin
+BuildRequires : glibc-locale
 BuildRequires : groff
 BuildRequires : less
 BuildRequires : libpipeline-dev
@@ -48,6 +50,7 @@ Summary: bin components for the man-db package.
 Group: Binaries
 Requires: man-db-data
 Requires: man-db-config
+Requires: man-db-license
 Requires: man-db-man
 
 %description bin
@@ -83,9 +86,18 @@ doc components for the man-db package.
 Summary: lib components for the man-db package.
 Group: Libraries
 Requires: man-db-data
+Requires: man-db-license
 
 %description lib
 lib components for the man-db package.
+
+
+%package license
+Summary: license components for the man-db package.
+Group: Default
+
+%description license
+license components for the man-db package.
 
 
 %package locales
@@ -105,7 +117,7 @@ man components for the man-db package.
 
 
 %prep
-%setup -q -n man-db-2.8.3
+%setup -q -n man-db-2.8.4
 %patch1 -p1
 
 %build
@@ -113,7 +125,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1526225639
+export SOURCE_DATE_EPOCH=1532714065
 export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -129,8 +141,11 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1526225639
+export SOURCE_DATE_EPOCH=1532714065
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/doc/man-db
+cp docs/COPYING.LIB %{buildroot}/usr/share/doc/man-db/docs_COPYING.LIB
+cp docs/COPYING %{buildroot}/usr/share/doc/man-db/docs_COPYING
 %make_install
 %find_lang man-db-gnulib
 %find_lang man-db
@@ -161,26 +176,23 @@ rm -rf %{buildroot}
 /usr/share/defaults/mandb/man_db.conf
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 %doc /usr/share/doc/man\-db/*
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/man-db/libman-2.8.3.so
+/usr/lib64/man-db/libman-2.8.4.so
 /usr/lib64/man-db/libman.so
-/usr/lib64/man-db/libmandb-2.8.3.so
+/usr/lib64/man-db/libmandb-2.8.4.so
 /usr/lib64/man-db/libmandb.so
+
+%files license
+%defattr(-,root,root,-)
+/usr/share/doc/man-db/docs_COPYING
+/usr/share/doc/man-db/docs_COPYING.LIB
 
 %files man
 %defattr(-,root,root,-)
-/usr/share/man/es/man1/apropos.1
-/usr/share/man/es/man1/man.1
-/usr/share/man/es/man1/manpath.1
-/usr/share/man/es/man1/whatis.1
-/usr/share/man/es/man1/zsoelim.1
-/usr/share/man/es/man5/manpath.5
-/usr/share/man/es/man8/catman.8
-/usr/share/man/es/man8/mandb.8
 /usr/share/man/it/man1/apropos.1
 /usr/share/man/it/man1/man.1
 /usr/share/man/it/man1/manpath.1

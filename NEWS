@@ -1,3 +1,36 @@
+man-db 2.8.4 (27 July 2018)
+===========================
+
+Major changes since man-db 2.8.3:
+
+	Fixes:
+	------
+
+	* Rely on decompressors reading from their standard input rather
+	  than redundantly passing them the input file on their command
+	  line.  This works better with downstream AppArmor confinement of
+	  decompressors.
+
+	* Fix invalid syntax in tmpfiles.d/man-db.conf when configured with
+	  --disable-cache-owner.
+
+	* Make seccomp sandbox allow sched_getaffinity, sometimes used by
+	  xz.
+
+	* Check for mandb_nfmt and mandb_tfmt in the manual page hierarchy
+	  as documented, not in the current directory.  This was broken by
+	  the working-directory-handling changes in 2.8.3.  Note that this
+	  change means that "man -l" will never use an external formatter
+	  (which was never documented behaviour and was surely a bad idea).
+
+	* Make seccomp sandbox allow some shared memory operations across
+	  the board rather than just when ESET File Security is in use; the
+	  Astrill VPN seems to require something similar, and there are
+	  doubtless other such preload hacks.
+
+	* Some versions of ESET File Security call msgget and msgsnd; if
+	  this program is in use, then allow those.
+
 man-db 2.8.3 (5 April 2018)
 ===========================
 

@@ -1,3 +1,296 @@
+2018-07-27  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.8.4.
+
+2018-07-27  Colin Watson  <cjwatson@debian.org>
+
+	Work around Gnulib/gettext mismatch
+
+	The versions of gettext infrastructure files installed by gnulib-tool
+	don't necessarily match our configured AM_GNU_GETTEXT_VERSION, so we
+	need to fix things up in bootstrap.
+
+	* bootstrap.conf (gnulib_tool_option_extras): Set --po-base to gl/ref-po
+	rather than gnulib/po.
+	(bootstrap_post_import_hook): Merge temporary gl/ref-po directory into
+	gl/po.
+
+2018-07-27  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade to Gnulib 20180726
+
+	* bootstrap: Sync to Gnulib 900ca5c0b092e50f9f17329feea3fbfe2b6e2139.
+	* bootstrap.conf (GNULIB_REVISION): Set to
+	900ca5c0b092e50f9f17329feea3fbfe2b6e2139.
+
+2018-07-18  Colin Watson  <cjwatson@debian.org>
+
+	Distribute man/es/translator.add
+
+	* man/es/Makefile.am (EXTRA_DIST): Add translator.add.
+
+2018-07-16  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Improve ESET compatibility further
+
+	* lib/sandbox.c (make_seccomp_filter): If libesets_pac.so is preloaded,
+	then allow msgset (second argument 0) and msgsnd.
+	* NEWS: Document this.
+
+2018-07-15  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Allow some shared memory operations
+
+	These were previously only allowed when ESET File Security is in use,
+	but the Astrill VPN seems to require something similar, there are
+	doubtless other such preload hacks, and they're relatively harmless.
+
+	* lib/sandbox.c (make_seccomp_filter): Allow shmat (third argument
+	SHM_RDONLY), shmctl (second argument IPC_STAT), shmdt, and shmget
+	regardless of preloads.
+	* NEWS: Document this.
+
+2018-06-08  Colin Watson  <cjwatson@debian.org>
+
+	Check for external formatter in correct directory
+
+	Check for mandb_nfmt and mandb_tfmt in the manual page hierarchy as
+	documented, not in the current directory.  This was broken by the
+	working-directory-handling changes in 2.8.3.
+
+	Reported by Josh Triplett.  Fixes Debian bug #901007.
+
+	* src/man.c (NFMT_PROG, TFMT_PROG): Remove leading "./".
+	(make_roff_command): Refactor confusing #ifdef forest.  Prefix dir to
+	TFMT_PROG/NFMT_PROG rather than looking in the current directory.  Don't
+	look for an external formatter at all if dir is NULL.
+	* NEWS: Document this.
+
+2018-06-08  Colin Watson  <cjwatson@debian.org>
+
+	Define an access(2) wrapper with clearer semantics
+
+	As usual for system calls, access(2) returns zero on success.  However,
+	I generally think of it as "can we access this file in this way", where
+	boolean semantics would be more convenient, and find it too easy to
+	invert logic by accident when using the system call directly.  Define a
+	CAN_ACCESS wrapper with boolean semantics.
+
+	* include/manconfig.h.in (CAN_ACCESS): New macro.
+	* lib/tempfile.c (path_search): Use CAN_ACCESS.
+	* src/catman.c (check_access): Likewise.
+	* src/filenames.c (make_filename): Likewise.
+	* src/man.c (make_roff_command, display): Likewise.
+	* src/ult_src.c (find_include): Likewise.
+	* src/whatis.c (use_grep): Likewise.
+
+2018-06-07  Felipe Castro  <fefcas@gmail.com>
+
+	Update Esperanto translation
+
+	* po/eo.po: Update from Translation Project.
+
+2018-06-01  Francisco Javier F. Serrador  <fserrador@gmail.com>
+
+	Update Spanish manual page translation
+
+	* man/po4a/po/es.po: Update from Translation Project.
+	* man/THANKS: Update translator credit.
+
+2018-05-29  Colin Watson  <cjwatson@debian.org>
+
+	Add po4a-based Spanish manual page translation
+
+	This supersedes the previous whole-file translations, which had not been
+	properly updated in many years.
+
+	* man/po4a/po/es.po: New from Translation Project (thanks, Francisco
+	Javier Serrador).
+	* man/LINGUAS: Remove es.
+	* man/LINGUAS.po4a: Add es.
+	* man/es/Makefile.am (PO4A_LINGUA): Set to yes.
+	(man1_MANS): Add man1/lexgrog.1 and man1/manconv.1.
+	(man8_MANS): Add man8/accessdb.8.
+	* man/es/man1/apropos.man1, man/es/man1/man.man1,
+	man/es/man1/manpath.man1, man/es/man1/whatis.man1,
+	man/es/man1/zsoelim.man1, man/es/man5/manpath.man5,
+	man/es/man8/catman.man8, man/es/man8/mandb.man8: Remove.
+	* man/es/translator.add: New file.
+	* man/po4a/Makefile.am (POFILES): Add po/es.po.
+	* man/po4a/po4a.cfg (po4a_langs): Add es.
+	* man/THANKS: Update translator credit.
+	* .gitignore: Add man/es/man1, man/es/man5, and man/es/man8.
+
+2018-05-29  Colin Watson  <cjwatson@debian.org>
+
+	Remove useless if-before-free tests
+
+	* lib/hashtable.c (plain_hashtable_free): Remove; this is precisely
+	equivalent to free.
+	* lib/hashtable.h (plain_hashtable_free): Remove.
+	* lib/orderfiles.c (order_files): Use free rather than
+	plain_hashtable_free.
+	* libdb/db_btree.c (btree_findkey): Likewise.
+
+	* lib/pathsearch.c (pathsearch, directory_on_path): Remove useless
+	if-before-free.
+	* libdb/db_lookup.c (free_mandata_elements): Likewise.
+	* src/check_mandirs.c (test_manfile, count_glob_matches): Likewise.
+	* src/descriptions.c (free_descriptions): Likewise.
+	* src/lexgrog_test.c (main): Likewise.
+	* src/man.c (display_filesystem, display_database, get_section_list):
+	Likewise.
+	* src/manp.c (add_system_manpath): Likewise.
+	* src/straycats.c (check_for_stray, straycats): Likewise.
+	* src/ult_src.c (ult_src): Likewise.
+
+2018-05-29  Colin Watson  <cjwatson@debian.org>
+
+	Use Gnulib progname module
+
+	This lets us produce more accurate error messages when programs are
+	invoked with an absolute path.
+
+	* bootstrap.conf (gnulib_modules): Add progname.
+	* include/manconfig.h.in (program_name): Remove.
+	* src/accessdb.c (main): Call set_program_name rather than similar
+	hand-rolled code.
+	* src/catman.c (main): Likewise.  Don't free program_name.
+	* src/globbing_test.c (main): Likewise.
+	* src/lexgrog_test.c (main): Likewise.
+	* src/man.c (main): Likewise.  Don't free program_name.
+	* src/manconv_main.c (main): Likewise.
+	* src/mandb.c (main): Likewise.  Don't free program_name.
+	* src/manpath.c (main): Likewise.
+	* src/tests/fspause.c (main): Likewise.
+	* src/whatis.c (main): Likewise.
+	* src/zsoelim_main.c (main): Likewise.
+
+	* src/man.c (manopt_to_env): Run program_name through base_name, since
+	that's no longer necessarily done up-front.
+	* src/whatis.c (main): Run program_name through base_name before
+	comparing it to APROPOS_NAME, since that's no longer necessarily done
+	up-front.
+
+2018-05-29  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade to Gnulib 20180527
+
+	* bootstrap.conf (GNULIB_URL): Remove.
+	(GNULIB_REVISION): Set to 90f289f249a266b1afb9c63e182f5d979d17df5f.
+	(gnulib_modules): Replace gettext with gettext-h.
+	(gnulib_tool_option_extras): Remove --no-cache-modules (accidental
+	leftover from earlier testing).
+	(local_gl_dir): Set to 'gnulib-local' to avoid confusion with 'gl' as
+	the local output directory.  Remove 'rm -rf gl' hack, now superseded.
+	(buildreq): Bump minimum autopoint and gettext versions to 0.18.3,
+	matching previous change to configure.ac.
+	* configure.ac (AM_PROG_AR, LT_INIT): Move below gl_EARLY.
+	* patches/argp-domain.patch: Rebase.
+	* src/tests/Makefile.am (TESTS_ENVIRONMENT): Remove use of
+	@LOCALCHARSET_TESTS_ENVIRONMENT@, which is no longer needed by Gnulib.
+
+2018-05-28  Colin Watson  <cjwatson@debian.org>
+
+	Switch to bootstrap
+
+	We no longer keep autogenerated files in git.
+
+	* .gitignore: Add **/Makefile, **/Makefile.in, /ABOUT-NLS, /aclocal.m4,
+	/build-aux, /config.h.in, /configure, /gl, /gnulib,
+	docs/INSTALL.autoconf, po/Makefile.in.in, po/Makevars, po/Rules-quot,
+	po/boldquot.sed, po/en@boldquot.header, po/en@quot.header,
+	po/insert-header.sin, po/quot.sed, and po/remove-potcdate.sin.  Remove
+	docs/Makefile, gnulib/*, init/Makefile, init/systemd/Makefile,
+	lib/Makefile, libdb/Makefile, man/Makefile, man/*/Makefile,
+	manual/Makefile, po/Makefile, po/Makefile.in, src/Makefile,
+	src/tests/Makefile, and tools/Makefile.
+	* ABOUT-NLS, Makefile.in, aclocal.m4, autogen.sh, build-aux,
+	config.h.in, configure, docs/INSTALL.autoconf, docs/Makefile.in, gnulib,
+	init/Makefile.in, init/systemd/Makefile.in, lib/Makefile.in,
+	libdb/Makefile.in, man/Makefile.in, man/da/Makefile.in,
+	man/de/Makefile.in, man/es/Makefile.in, man/fr/Makefile.in,
+	man/id/Makefile.in, man/it/Makefile.in, man/ja/Makefile.in,
+	man/nl/Makefile.in, man/pl/Makefile.in, man/po4a/Makefile.in,
+	man/pt_BR/Makefile.in, man/ru/Makefile.in, man/sr/Makefile.in,
+	man/sv/Makefile.in, man/tr/Makefile.in, man/zh_CN/Makefile.in,
+	manual/Makefile.in, po/Makefile.in.in, po/Makevars, po/Rules-quot,
+	po/boldquot.sed, po/en@boldquot.header, po/en@quot.header,
+	po/insert-header.sin, po/quot.sed, po/remove-potcdate.sin,
+	src/Makefile.in, src/tests/Makefile.in, tools/Makefile.in: Remove.
+
+	* bootstrap, bootstrap.conf: New files.
+	* Makefile.am (GNULIB_PO, SUBDIRS, EXTRA_DIST, ACLOCAL_AMFLAGS): Refer
+	to gl/ rather than gnulib/ (gnulib/ now contains pristine source).
+	(EXTRA_DIST): Replace autogen.sh with bootstrap and bootstrap.conf.
+	Replace gnulib/argp-domain.patch with patches/argp-domain.patch.  Add
+	patches/fdutimens-hurd.patch.  Remove gnulib/m4/gnulib-cache.m4 and
+	gnulib/m4/gnulib-tool.m4.
+	* gnulib/argp-domain.patch: Rename to ...
+	* patches/argp-domain.patch: ... this.  Update target paths.
+	* gnulib/fdutimens-hurd.patch: Rename to ...
+	* patches/fdutimens-hurd.patch: ... this.  Update target paths.
+	* configure.ac (AM_GNU_GETTEXT_VERSION): Upgrade to 0.18.3, for
+	compatibility with current Automake.
+	(HAVE_GNULIB_PO, AC_CONFIG_FILES): Refer to gl/ rather than gnulib/.
+	* lib/Makefile.am (libman_la_CPPFLAGS, libman_la_LIBADD): Likewise.
+	* libdb/Makefile.am (libmandb_la_CPPFLAGS): Likewise.
+	* src/Makefile.am (AM_CPPFLAGS, LIBMAN): Likewise.
+	* src/tests/Makefile.am (AM_CPPFLAGS, fspause_LDADD): Likewise.
+
+	* docs/HACKING: Describe new policy.
+	* release.sh: Call ./bootstrap rather than ./autogen.sh.
+
+2018-05-17  pan93412  <pan93412@gmail.com>
+
+	Add Traditional Chinese translation
+
+	* po/zh_TW.po: New from Translation Project.
+	* po/LINGUAS: Add zh_TW.
+	* man/THANKS: Add translator credit.
+
+2018-04-22  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Allow sched_getaffinity
+
+	This is used by xz-utils >= 5.2.3 if the --threads=0 option is in use
+	(perhaps via XZ_DEFAULTS or XZ_OPT).
+
+	Reported by Axel Rohde.
+
+	* lib/sandbox.c (make_seccomp_filter): Allow sched_getaffinity.
+	* NEWS: Document this.
+
+2018-04-06  Colin Watson  <cjwatson@debian.org>
+
+	Fix invalid man-db.conf with --disable-cache-owner
+
+	Fixes Savannah bug #53575.
+
+	* m4/man-arg-cache-owner.m4: Set and substitute cache_top_owner.
+	* init/systemd/man-db.conf.in: Substitute cache_top_owner rather than
+	man_owner.
+	* init/systemd/Makefile.am (man-db.conf): Likewise.
+	* NEWS: Document this.
+
+2018-04-06  Colin Watson  <cjwatson@debian.org>
+
+	Remove redundant debugging information
+
+	* lib/decompress.c (decompress_open): Remove filename from
+	decompress_zlib command name.  pipeline_dump already includes this
+	information from want_infile.
+
+2018-04-06  Colin Watson  <cjwatson@debian.org>
+
+	Rely on decompressors reading from stdin
+
+	This works better with downstream AppArmor confinement of decompressors.
+
+	* lib/decompress.c (decompress_open): Don't pass filename on
+	decompressor command lines.
+	* NEWS: Document this.
+
 2018-04-05  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.8.3.
