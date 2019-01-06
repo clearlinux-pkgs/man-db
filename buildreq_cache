@@ -1,9 +1,10 @@
-2.8.4
-gdbm-dev
+2.8.5
 db-dev
-zlib-dev
-glibc-locale
 flex
-util-linux
+gdbm-dev
+glibc-locale
 groff
 less
+libseccomp-dev
+util-linux
+zlib-dev

@@ -1,3 +1,302 @@
+2019-01-05  Colin Watson  <cjwatson@debian.org>
+
+	* Version: 2.8.5.
+
+2019-01-05  Colin Watson  <cjwatson@debian.org>
+
+	Upgrade to Gnulib 20190105
+
+	In line with Gnulib, we now require Autoconf 2.63 and Automake 1.11.2.
+
+	* bootstrap: Sync to Gnulib d271f868a8df9bbec29049d01e056481b7a1a263.
+	* bootstrap.conf (GNULIB_REVISION): Set to
+	d271f868a8df9bbec29049d01e056481b7a1a263.
+	(buildreq): Bump required autoconf version to 2.63 and required automake
+	version to 1.11.2.
+	* configure.ac (AM_SILENT_RULES, AM_PROG_AR): Remove conditionals, which
+	were there for Automake 1.10 support.
+	(AC_PREREQ): Bump to 2.63.
+	* NEWS: Document this.
+
+2019-01-05  Colin Watson  <cjwatson@debian.org>
+
+	Use tar --sort=name if available
+
+	* m4/man-tar-sort-name.m4: New file.
+	* configure.ac: Call MAN_TAR_SORT_NAME.
+
+2019-01-05  Colin Watson  <cjwatson@debian.org>
+
+	Fix distcheck following addition of systemd timer
+
+	* Makefile.am (AM_DISTCHECK_CONFIGURE_FLAGS): Add
+	--with-systemdsystemunitdir=\$${prefix}/lib/systemd/system.
+
+2019-01-05  Colin Watson  <cjwatson@debian.org>
+
+	Fix distribution of man-db.timer
+
+	Automake's "_DATA" primary defaults to "nodist_", not "dist_".
+
+	* init/systemd/Makefile.am (systemdsystemunit_DATA): Rename to ...
+	(dist_systemdsystemunit_DATA): ... this.
+	(nodist_systemdsystemunit_DATA): Rename to ...
+	(systemdsystemunit_DATA): ... this.
+	(EXTRA_DIST): Add man-db.timer if INSTALL_SYSTEMD_TIMER is false.
+
+2019-01-05  Colin Watson  <cjwatson@debian.org>
+
+	sandbox: Work around Microsoft SCEP
+
+	This is a proprietary antivirus program and I've only been able to guess
+	at how to handle it.  Note that it is no longer supported by Microsoft
+	and so users should probably replace it with something else, but I still
+	want to minimise the number of support requests I get related to it.
+
+	* lib/sandbox.c (make_seccomp_filter): If libscep_pac.so is preloaded,
+	then allow some system calls related to sockets and System V message
+	queues.
+	* NEWS: Document this.
+
+2018-12-24  Colin Watson  <cjwatson@debian.org>
+
+	Use (void *) 0 as a variadic sentinel
+
+	NULL is formally incorrect here since the standard allows it to be an
+	integer constant expression.
+
+	* lib/decompress.c (decompress_open, decompress_fdopen): Use (void *)
+	rather than NULL as a sentinel for variadic functions.
+	* libdb/db_delete.c (dbdelete): Likewise.
+	* src/catman.c (catman, parse_for_sec, main): Likewise.
+	* src/check_mandirs.c (add_dir_entries): Likewise.
+	* src/compression.c (comp_file): Likewise.
+	* src/filenames.c (make_filename): Likewise.
+	* src/globbing.c (look_for_file): Likewise.
+	* src/lexgrog.l (find_name): Likewise.
+	* src/man.c (do_extern, run_mandb, make_roff_command, make_browser,
+	setenv_less, add_output_iconv, make_display_command, tmp_cat_filename,
+	format_display_and_save, format_display, display_catman, display,
+	local_man_loop): Likewise.
+	* src/manconv_client.c (add_manconv): Likewise.
+	* src/manconv_main.c (parse_opt): Likewise.
+	* src/manp.c (pathappend, add_nls_manpaths, add_system_manpath,
+	add_dir_to_path_list, get_catpath): Likewise.
+	* src/straycats.c (check_for_stray, open_catdir, straycats): Likewise.
+	* src/whatis.c (use_grep, display): Likewise.
+
+2018-12-06  Colin Watson  <cjwatson@debian.org>
+
+	Honour --enable-cache-owner in systemd timer
+
+	* init/systemd/Makefile.am (man-db.service): Substitute
+	@cache_top_owner@.
+	* init/systemd/man-db.service.in (ExecStart, User): Use
+	@cache_top_owner@ rather than hardcoding "man".
+
+2018-12-06  Colin Watson  <cjwatson@debian.org>
+
+	Improve systemd unit commentary
+
+	* init/systemd/man-db.service.in (ExecStart): Add comment.
+
+2018-12-06  Colin Watson  <cjwatson@debian.org>
+
+	Allow disabling installation of systemd components
+
+	* m4/man-arg-systemdtmpfilesdir.m4: Define an INSTALL_SYSTEMD_TMPFILES
+	Automake conditional (true unless --with-systemdtmpfilesdir=no).
+	* m4/man-arg-systemdsystemunitdir.m4: Define an INSTALL_SYSTEMD_TIMER
+	Automake conditional (true unless --with-systemdsystemunitdir=no).
+	* init/systemd/Makefile.am: Honour INSTALL_SYSTEMD_TMPFILES and
+	INSTALL_SYSTEMD_TIMER.
+
+2018-12-06  Colin Watson  <cjwatson@debian.org>
+
+	Ship a systemd timer for daily DB maintenance
+
+	Thanks to Christian Göttsche.  Fixes Debian bug #858022.
+
+	* m4/man-arg-systemdsystemunitdir.m4: New file.
+	* configure.ac: Accept --with-systemdsystemunitdir option.
+	* init/systemd/Makefile.am (EXTRA_DIST): Add man-db.service.in.
+	(CLEANFILES): Add man-db.service.
+	(systemdsystemunit_DATA): Install man-db.timer.
+	(nodist_systemdsystemunit_DATA): Install man-db.service.
+	(man-db.service): New rule.
+	* init/systemd/man-db.service.in, init/systemd/man-db.timer: New files.
+	* .gitignore: Add init/systemd/man-db.service.
+	* NEWS: Document this.
+
+2018-11-14  Colin Watson  <cjwatson@debian.org>
+
+	Fix incorrect error message
+
+	Reported by Julian Gilbey.  Fixes Debian bug #913721.
+
+	* src/man.c (check_standard_fds): Correct error message if stdout is not
+	open for writing (not "for reading", as previously claimed).
+
+2018-11-09  Colin Watson  <cjwatson@debian.org>
+
+	release.sh: Simplify Lex handling
+
+	release.sh had a hack to ensure that flex-generated scanners are fresh
+	in release tarballs.  This is more easily achieved by configuring with
+	--enable-maintainer-mode, which causes Automake to enable the Lex
+	rebuild rule.
+
+	* release.sh: Configure with --enable-maintainer-mode; drop conditional
+	removals of src/lexgrog.c and src/zsoelim.c.
+
+2018-11-09  Colin Watson  <cjwatson@debian.org>
+
+	lexgrog: Fix handling of \- in RHS of NAME section
+
+	Fixes Debian bug #913351.
+
+	* src/lexgrog.l (MAN_NAME): Split into MAN_NAME (left-hand side) and
+	MAN_DESC (right-hand side).  Most rules remain as before, except that \-
+	and similar are only handled specially in MAN_NAME and transition to
+	MAN_DESC, and rules that add a 0x11 marker (indicating the start of a
+	new whatis definition) transition to MAN_NAME.
+	(MAN_NAME_AT, MAN_NAME_BSX, MAN_NAME_BX, MAN_NAME_BX_RELEASE,
+	MAN_NAME_DQ, MAN_NAME_FX, MAN_NAME_NX, MAN_NAME_OX): Rename to
+	MAN_DESC_*.
+	(mdoc_text): Transition to MAN_DESC rather than MAN_NAME.
+	(newline_found): If adding 0x11, transition to MAN_NAME.
+	* src/tests/lexgrog-3: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add lexgrog-3.
+	* NEWS: Document this.
+
+2018-11-09  Colin Watson  <cjwatson@debian.org>
+
+	* NEWS: Document changes since 2.8.4.
+
+2018-11-09  Colin Watson  <cjwatson@debian.org>
+
+	lexgrog: Add test for multiple whatis definitions
+
+	* src/tests/lexgrog-2: New file.
+	* src/tests/Makefile.am (ALL_TESTS): Add lexgrog-2.
+
+2018-11-09  Colin Watson  <cjwatson@debian.org>
+
+	lexgrog: Tidy up rules section
+
+	No functional change.
+
+	* src/lexgrog.l: Make more use of start condition scopes.  Reindent
+	rules somewhat to make better use of vertical space.
+
+2018-11-03  Nikola Forró  <nforro@redhat.com>
+
+	Fix several resource and memory leaks
+
+	* lib/decompress.c (decompress_zlib): Fix fd leak if gzdopen fails.
+	* lib/encodings.c (find_charset_locale): Free locale if setlocale fails.
+	* src/man.c (make_roff_command): Free fmt_prog.
+	* src/mandb.c (process_manpath): Free catpath if manpath is not a
+	directory.
+	* src/whatis.c (do_apropos): Free found_here.
+
+2018-10-27  enolp  <enolp@softastur.org>
+
+	Add Asturian translation
+
+	* po/ast.po: New from Translation Project.
+	* po/LINGUAS: Add ast.
+	* man/THANKS: Add translator credit.
+
+2018-10-27  Pedro Albuquerque  <palbuquerque73@gmail.com>
+
+	Update Portuguese manual page translation
+
+	* man/po4a/po/pt.po: Update from Translation Project.
+
+2018-10-21  Colin Watson  <cjwatson@debian.org>
+
+	Add Portuguese manual page translation
+
+	* man/po4a/po/pt.po: New from Translation Project (thanks, Pedro
+	Albuquerque).
+	* configure.ac (AC_CONFIG_FILES): Add man/pt/Makefile.
+	* man/LINGUAS.po4a: Add pt.
+	* man/Makefile.am (DIST_SUBDIRS): Add pt.
+	* man/pt/Makefile.am, man/pt/translator.add: New files.
+	* man/po4a/Makefile.am (POFILES): Add po/pt.po.
+	* man/po4a/po4a.cfg (po4a_langs): Add pt.
+	* man/THANKS: Add translator credit.
+	* .gitignore: Add man/pt/man1, man/pt/man5, and man/pt/man8.
+
+2018-10-21  Colin Watson  <cjwatson@debian.org>
+
+	Switch more language lists to one-per-line format
+
+	* man/LINGUAS.po4a: Switch to one language code per line, so that we
+	have better diffs in future.
+	* man/Makefile.am (DIST_SUBDIRS): Likewise.
+	* man/po4a/cfg (po4a_langs): Likewise.
+
+2018-10-21  Pedro Albuquerque  <palbuquerque73@gmail.com>
+
+	Add Portuguese translation
+
+	* po/pt.po: New from Translation Project.
+	* po/LINGUAS: Add pt.
+	* man/THANKS: Add translator credit.
+
+2018-10-21  Colin Watson  <cjwatson@debian.org>
+
+	Switch po/LINGUAS to one-per-line format
+
+	* po/LINGUAS: Switch to one language code per line, so that we have
+	better diffs in future.
+
+2018-10-21  Chen Qi  <Qi.Chen@windriver.com>
+
+	man-arg-config-file: fix to use config_file
+
+	* m4/man-arg-config-file.m4: Compute config_file_basename based on
+	config_file, not withval.
+
+2018-08-20  Colin Watson  <cjwatson@debian.org>
+
+	Fail to configure if flex is needed but missing
+
+	Fixes Savannah bug #54541.
+
+	* configure.ac: Issue an error if AC_PROG_LEX didn't find a lexer
+	generator and either src/lexgrog.c or src/zsoelim.c is missing (as may
+	be the case when building from a git clone rather than a released
+	tarball).
+
+2018-08-02  Colin Watson  <cjwatson@debian.org>
+
+	Fix warning from gcc -Wcast-function-type
+
+	This exposed the fact that errors from unlink in the cleanup path were
+	previously ignored.  We now issue a warning in the same way that
+	commit_tmp_cat does.
+
+	* src/man.c (cleanup_unlink): New function.
+	(open_cat_stream, close_cat_stream, display_catman): Use cleanup_unlink
+	rather than an incorrect cast of unlink.
+
+2018-08-02  Colin Watson  <cjwatson@debian.org>
+
+	Fix build with Berkeley DB
+
+	Fixes Savannah bug #54425.
+
+	* libdb/db_btree.c: Include <stdlib.h> for free.
+
+2018-07-27  Colin Watson  <cjwatson@debian.org>
+
+	Update advertised file size
+
+	* docs/man-db.lsm (Primary-site): Update file size.
+
 2018-07-27  Colin Watson  <cjwatson@debian.org>
 
 	* Version: 2.8.4.

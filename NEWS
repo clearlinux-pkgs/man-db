@@ -1,3 +1,38 @@
+man-db 2.8.5 (5 January 2019)
+=============================
+
+Major changes since man-db 2.8.4:
+
+	Building man-db now requires Autoconf >= 2.63 and Automake >=
+	1.11.2.
+
+	Fixes:
+	------
+
+	* Fix build with Berkeley DB.
+
+	* Fail to configure if flex is needed but missing.
+
+	* Fix the comment in the first line of the configuration file in the
+	  case where configure was not given a --with-config-file option.
+
+	* Fix several resource and memory leaks.
+
+	* Fix handling of \- in the right-hand side of a NAME section.
+
+	* Work around Microsoft's proprietary "System Center Endpoint
+	  Protection" antivirus program in the seccomp sandbox.
+
+	Improvements:
+	-------------
+
+	* Ship a systemd timer to perform daily database maintenance.
+
+	* Allow disabling the installation of the systemd tmpfiles snippet
+	  and the systemd timer by configuring with
+	  --with-systemdtmpfilesdir=no and --with-systemdsystemunitdir=no
+	  respectively.
+
 man-db 2.8.4 (27 July 2018)
 ===========================
 
