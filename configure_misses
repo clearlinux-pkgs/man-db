@@ -8,12 +8,10 @@ Configure miss: vgrind
 Configure miss: gvgrind
 Configure miss: grap
 Configure miss: compress
-Configure miss: lzip
 Configure miss: linewrap.h
 Configure miss: crtdefs.h
 Configure miss: 32-bit host C ABI
 Configure miss: whether C symbols are prefixed with underscore at the linker level
-Configure miss: whether strcasestr works
 Configure miss: whether getcwd aborts when 4k < cwd_length < 16k
 Configure miss: ioctl with POSIX signature
 Configure miss: whether pthread_rwlock_rdlock prefers a writer to a reader

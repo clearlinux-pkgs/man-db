@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.8.5
-Release  : 33
+Release  : 34
 URL      : http://nongnu.askapache.com/man-db/man-db-2.8.5.tar.xz
 Source0  : http://nongnu.askapache.com/man-db/man-db-2.8.5.tar.xz
 Source99 : http://nongnu.askapache.com/man-db/man-db-2.8.5.tar.xz.asc
@@ -25,7 +25,6 @@ Requires: man-db-services = %{version}-%{release}
 Requires: groff
 BuildRequires : automake
 BuildRequires : automake-dev
-BuildRequires : db-dev
 BuildRequires : flex
 BuildRequires : gdbm-dev
 BuildRequires : gettext-bin
@@ -55,7 +54,6 @@ Requires: man-db-data = %{version}-%{release}
 Requires: man-db-libexec = %{version}-%{release}
 Requires: man-db-config = %{version}-%{release}
 Requires: man-db-license = %{version}-%{release}
-Requires: man-db-man = %{version}-%{release}
 Requires: man-db-services = %{version}-%{release}
 
 %description bin
@@ -149,7 +147,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1546789413
+export SOURCE_DATE_EPOCH=1551154952
 export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -165,7 +163,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1546789413
+export SOURCE_DATE_EPOCH=1551154952
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/man-db
 cp docs/COPYING %{buildroot}/usr/share/package-licenses/man-db/docs_COPYING
