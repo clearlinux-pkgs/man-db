@@ -6,13 +6,13 @@
 #
 Name     : man-db
 Version  : 2.8.5
-Release  : 36
+Release  : 37
 URL      : https://nongnu.askapache.com/man-db/man-db-2.8.5.tar.xz
 Source0  : https://nongnu.askapache.com/man-db/man-db-2.8.5.tar.xz
 Source1 : https://nongnu.askapache.com/man-db/man-db-2.8.5.tar.xz.asc
 Summary  : No detailed summary available
 Group    : Development/Tools
-License  : GPL-2.0 GPL-2.0+ GPL-3.0+ LGPL-2.1
+License  : GPL-2.0 GPL-3.0 LGPL-2.1
 Requires: man-db-bin = %{version}-%{release}
 Requires: man-db-config = %{version}-%{release}
 Requires: man-db-data = %{version}-%{release}
@@ -147,7 +147,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1567787513
+export SOURCE_DATE_EPOCH=1571288636
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -164,11 +164,11 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1567787513
+export SOURCE_DATE_EPOCH=1571288636
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/man-db
-cp docs/COPYING %{buildroot}/usr/share/package-licenses/man-db/docs_COPYING
-cp docs/COPYING.LIB %{buildroot}/usr/share/package-licenses/man-db/docs_COPYING.LIB
+cp %{_builddir}/man-db-2.8.5/docs/COPYING %{buildroot}/usr/share/package-licenses/man-db/b47456e2c1f38c40346ff00db976a2badf36b5e3
+cp %{_builddir}/man-db-2.8.5/docs/COPYING.LIB %{buildroot}/usr/share/package-licenses/man-db/545f380fb332eb41236596500913ff8d582e3ead
 %make_install
 %find_lang man-db-gnulib
 %find_lang man-db
@@ -214,8 +214,8 @@ cp docs/COPYING.LIB %{buildroot}/usr/share/package-licenses/man-db/docs_COPYING.
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/man-db/docs_COPYING
-/usr/share/package-licenses/man-db/docs_COPYING.LIB
+/usr/share/package-licenses/man-db/545f380fb332eb41236596500913ff8d582e3ead
+/usr/share/package-licenses/man-db/b47456e2c1f38c40346ff00db976a2badf36b5e3
 
 %files man
 %defattr(0644,root,root,0755)

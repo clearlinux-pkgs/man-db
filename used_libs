@@ -1,5 +1,5 @@
 libc.so.6
-libgdbm.so.4
+libgdbm.so.6
 libpipeline.so.1
 libseccomp.so.2
 libz.so.1
