@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.8.5
-Release  : 38
+Release  : 39
 URL      : https://nongnu.askapache.com/man-db/man-db-2.8.5.tar.xz
 Source0  : https://nongnu.askapache.com/man-db/man-db-2.8.5.tar.xz
 Source1 : https://nongnu.askapache.com/man-db/man-db-2.8.5.tar.xz.asc
@@ -25,6 +25,7 @@ Requires: man-db-services = %{version}-%{release}
 Requires: groff
 BuildRequires : automake
 BuildRequires : automake-dev
+BuildRequires : buildreq-cpan
 BuildRequires : flex
 BuildRequires : gdbm-dev
 BuildRequires : gettext-bin
@@ -147,7 +148,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1571330211
+export SOURCE_DATE_EPOCH=1571335809
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -164,7 +165,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1571330211
+export SOURCE_DATE_EPOCH=1571335809
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/man-db
 cp %{_builddir}/man-db-2.8.5/docs/COPYING %{buildroot}/usr/share/package-licenses/man-db/b47456e2c1f38c40346ff00db976a2badf36b5e3
