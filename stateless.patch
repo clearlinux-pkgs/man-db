@@ -3,7 +3,10 @@ From: Michael Ikey Doherty <michael.i.doherty@intel.com>
 Date: Mon, 2 Feb 2015 15:36:35 +0000
 Subject: [PATCH] Use system defaults in absence of site configuration
 
+[pmccarty] Rebased for update to 2.9.0
+
 Signed-off-by: Michael Ikey Doherty <michael.i.doherty@intel.com>
+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
 ---
  configure.ac                      |  1 +
  m4/man-arg-default-config-file.m4 | 21 +++++++++++++++++++++
@@ -89,9 +92,9 @@ index 75e43f2..6385821 100644
  	}
  
  	if (getenv ("MAN_TEST_DISABLE_SYSTEM_CONFIG") == NULL) {
--		config = fopen (CONFIG_FILE, "r");
-+		config = fopen (DEFAULT_CONFIG_FILE, "r");
- 		if (config == NULL) {
+-		config_file = fopen (CONFIG_FILE, "r");
++		config_file = fopen (DEFAULT_CONFIG_FILE, "r");
+ 		if (config_file == NULL) {
  			if (optional)
  				debug ("can't open %s; continuing anyway\n",
 -				       CONFIG_FILE);
@@ -105,12 +108,12 @@ index 75e43f2..6385821 100644
 +		} else {
 +			debug ("From the config file %s:\n\n", DEFAULT_CONFIG_FILE);
 +
-+			add_to_dirlist (config, 0);
-+			fclose (config);
++			add_to_dirlist (config_file, 0);
++			fclose (config_file);
 +		}
 +        /* site configuration */
-+		config = fopen (CONFIG_FILE, "r");
-+		if (config == NULL) {
++		config_file = fopen (CONFIG_FILE, "r");
++		if (config_file == NULL) {
 +			debug ("can't open %s; continuing anyway\n",
 +				CONFIG_FILE);
 +

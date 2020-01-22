@@ -1,3 +1,138 @@
+man-db 2.9.0 (23 October 2019)
+==============================
+
+Major changes since man-db 2.8.7:
+
+	Fixes:
+	------
+
+	* man --recode and manconv now adjust encoding declarations on the
+	  first line of their input to refer to the new encoding.
+
+	* Fix comparison of candidate manual pages to correctly handle the case
+	  where the language elements are the same and match the locale, but
+	  the territory elements differ.
+
+	Improvements:
+	-------------
+
+	* Many typographical improvements to man-db's own manual pages,
+	  largely thanks to Bjarni Ingi Gislason.
+
+	* Rewrite parts of man(1) to make it a more accessible introduction.
+
+	* If run with no arguments or only a section, man now suggests
+	  running "man man".
+
+	* man now understands the <page>(<section>) form on its command
+	  line, so for example "man 'chmod(2)'" is now the same as "man 2
+	  chmod".  While this requires more quoting, it may also be more
+	  convenient when copying and pasting cross-references to manual
+	  pages.)
+
+	* manconv now guesses the input encoding based on the file name if
+	  it is not explicitly specified.
+
+	* There is a new "man-recode" program.  It fulfils a purpose similar
+	  to "man --recode", but has an interface designed for bulk
+	  conversion and so can be much faster when used on a large number
+	  of pages.
+
+	Compatibility notes:
+	--------------------
+
+	* Remove the ability to undefine COMP_SRC at build-time to disable
+	  reading compressed manual pages.  This was always only a
+	  micro-optimisation, and it wasn't worth the extra code complexity.
+	  You can still configure without any compressors (either by not
+	  having them available at build time, or by configuring with
+	  "--with-gzip=" etc.) to achieve much the same practical effect,
+	  although the test suite still requires at least gunzip.
+
+man-db 2.8.7 (26 August 2019)
+=============================
+
+Major changes since man-db 2.8.6.1:
+
+	Fixes:
+	------
+
+	* Further workarounds for ESET File Security: allow sendmsg when it
+	  is in use.
+
+	* The seccomp sandbox now causes disallowed system calls to return
+	  EPERM rather than raising SIGSYS, in the hope of being less
+	  disruptive to preload hacks.
+
+	* Make seccomp sandbox allow getrandom, used by Hardened Malloc.
+
+	* man no longer saves cat pages if --no-hyphenation or
+	  --no-justification is used.
+
+	* Move decompression code out of libman.  This should really fix a
+	  link failure using the Darwin linker (unsuccessfully attempted in
+	  2.8.6), and possibly on other platforms too.
+
+	* Pass the database file name around in function parameters, rather
+	  than storing it in a global variable with an unresolved symbol
+	  from libmandb.  Like the previous item, this fixes a link failure
+	  using the Darwin linker, and possibly on other platforms too.
+
+	* Return database entries in sorted order when using NDBM.  (This is
+	  based on a similar fix to the GDBM backend in man-db 2.4.2.)
+
+	Improvements:
+	-------------
+
+	* Recognise Esperanto, Tamil, and Ukrainian translations of the NAME
+	  section.
+
+man-db 2.8.6.1 (5 August 2019)
+==============================
+
+Major changes since man-db 2.8.6:
+
+	Fixes:
+	------
+
+	* Fix missing memory copies in ult_src that caused segfaults in
+	  mandb.
+
+man-db 2.8.6 (3 August 2019)
+============================
+
+Major changes since man-db 2.8.5:
+
+	Fixes:
+	------
+
+	* If more than one of "../man", "man", "../share/man", and
+	  "share/man" exist relative to a directory on $PATH, then all of
+	  them are now added to the automatically-determined manpath;
+	  previously, only the first was considered.
+
+	* Remove arbitrary limit on manpath size.
+
+	* The systemd database maintenance service now runs mandb with the
+	  --quiet option, avoiding excess log messages.
+
+	* Default to --without-systemdsystemunitdir and
+	  --without-systemdtmpfilesdir on non-Linux systems.
+
+	* Fix failure to link libman using the Darwin linker.
+
+	* "apropos -w" now works when given a non-lower-case pattern.
+
+	Improvements:
+	-------------
+
+	* Convert most list and hash table code to Gnulib's container types:
+	  these are more flexible and normally more concise than home-grown
+	  equivalents.
+
+	* There is a new configure option --disable-manual, which causes the
+	  man-db manual not to be built or installed.
+
 man-db 2.8.5 (5 January 2019)
 =============================
 
@@ -645,8 +780,8 @@ Major changes since man-db 2.5.9:
 
 	* As promised in the release notes for man-db 2.5.8, man-db no
 	  longer ships its own copy of libpipeline
-	  (http://libpipeline.nongnu.org/).  You must build and install that
-	  library separately.
+	  (https://nongnu.org/libpipeline/).  You must build and install
+	  that library separately.
 
 	* Search the full manpath when expanding .so directives in manual
 	  pages.  As part of this, '.so name.1' should now work as well as
@@ -735,7 +870,7 @@ Major changes since man-db 2.5.7:
 	  context.  Thanks to the Debian Perl maintainers for the idea.
 
 	* Allow building with an external libpipeline
-	  (http://libpipeline.nongnu.org/), which has been split out from
+	  (https://nongnu.org/libpipeline/), which has been split out from
 	  man-db.  This is a transitional measure: a future version of
 	  man-db will stop shipping its own copy of libpipeline.
 

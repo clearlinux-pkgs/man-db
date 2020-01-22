@@ -1,10 +1,9 @@
-2.8.5
-db-dev
+2.9.0
 flex
 gdbm-dev
 glibc-locale
-groff
 less
 libseccomp-dev
+pkgconfig(zlib)
 util-linux
 zlib-dev

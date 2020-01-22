@@ -1,3 +1,4 @@
+Configure miss: whether -Wno-missing-field-initializers is needed
 Configure miss: www-browser
 Configure miss: lynx
 Configure miss: elinks
@@ -10,11 +11,11 @@ Configure miss: grap
 Configure miss: compress
 Configure miss: linewrap.h
 Configure miss: crtdefs.h
-Configure miss: 32-bit host C ABI
 Configure miss: whether C symbols are prefixed with underscore at the linker level
 Configure miss: whether getcwd aborts when 4k < cwd_length < 16k
 Configure miss: ioctl with POSIX signature
 Configure miss: whether pthread_rwlock_rdlock prefers a writer to a reader
 Configure miss: working nanosleep
 Configure miss: working re_compile_pattern
+Configure miss: 32-bit host C ABI
 Configure miss: po4a
