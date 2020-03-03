@@ -1,3 +1,16 @@
+man-db 2.9.1 (25 February 2020)
+===============================
+
+Major changes since man-db 2.9.0:
+
+	Improvements:
+	-------------
+
+	* Drop fdutimens patch for GNU/Hurd; the bug it was working around
+	  was fixed in glibc 2.28.
+
+	* Add MANDB_MAP entry mapping /snap/man to /var/cache/man/snap.
+
 man-db 2.9.0 (23 October 2019)
 ==============================
 

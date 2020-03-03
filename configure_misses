@@ -1,3 +1,5 @@
+Configure miss: whether the compiler is clang
+Configure miss: compiler option needed when checking for declarations
 Configure miss: whether -Wno-missing-field-initializers is needed
 Configure miss: www-browser
 Configure miss: lynx
@@ -15,6 +17,7 @@ Configure miss: whether C symbols are prefixed with underscore at the linker lev
 Configure miss: whether getcwd aborts when 4k < cwd_length < 16k
 Configure miss: ioctl with POSIX signature
 Configure miss: whether pthread_rwlock_rdlock prefers a writer to a reader
+Configure miss: whether mbrtowc stores incomplete characters
 Configure miss: working nanosleep
 Configure miss: working re_compile_pattern
 Configure miss: 32-bit host C ABI
