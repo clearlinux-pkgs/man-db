@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.9.1
-Release  : 41
+Release  : 42
 URL      : https://nongnu.askapache.com/man-db/man-db-2.9.1.tar.xz
 Source0  : https://nongnu.askapache.com/man-db/man-db-2.9.1.tar.xz
 Source1  : https://nongnu.askapache.com/man-db/man-db-2.9.1.tar.xz.asc
@@ -151,13 +151,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1583198087
+export SOURCE_DATE_EPOCH=1585949382
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 export CXXFLAGS="$CXXFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
-%reconfigure --disable-static --disable-setuid
+%reconfigure --disable-static --disable-setuid \
+--with-systemdsystemunitdir=/usr/lib/systemd/system
 make  %{?_smp_mflags}
 
 %check
@@ -168,7 +169,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1583198087
+export SOURCE_DATE_EPOCH=1585949382
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/man-db
 cp %{_builddir}/man-db-2.9.1/docs/COPYING %{buildroot}/usr/share/package-licenses/man-db/b47456e2c1f38c40346ff00db976a2badf36b5e3
@@ -248,8 +249,8 @@ cp %{_builddir}/man-db-2.9.1/docs/COPYING.LIB %{buildroot}/usr/share/package-lic
 
 %files services
 %defattr(-,root,root,-)
-/lib/systemd/system/man-db.service
-/lib/systemd/system/man-db.timer
+/usr/lib/systemd/system/man-db.service
+/usr/lib/systemd/system/man-db.timer
 
 %files locales -f man-db-gnulib.lang -f man-db.lang
 %defattr(-,root,root,-)

@@ -1,1 +1,2 @@
- --disable-setuid
+--disable-setuid
+--with-systemdsystemunitdir=/usr/lib/systemd/system
