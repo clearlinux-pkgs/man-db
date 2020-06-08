@@ -1,3 +1,26 @@
+man-db 2.9.2 (1 June 2020)
+==========================
+
+Major changes since man-db 2.9.1:
+
+	Fixes:
+	------
+
+	* Fix "man -X75-12" and "man -X100-12" to set the document font size
+	  (using "-rS12") as well as the device (using "-TX75-12" or
+	  "-TX100-12").
+
+	* Fix incompatibility of "man -X" and friends with the seccomp
+	  sandbox.
+
+	Improvements:
+	-------------
+
+	* Add a bug tracker link to man-db's own manual pages.
+
+	* Add support for zstd-compressed manual pages, thanks to Bernhard
+	  Rosenkränzer.
+
 man-db 2.9.1 (25 February 2020)
 ===============================
 
@@ -41,7 +64,7 @@ Major changes since man-db 2.8.7:
 	  line, so for example "man 'chmod(2)'" is now the same as "man 2
 	  chmod".  While this requires more quoting, it may also be more
 	  convenient when copying and pasting cross-references to manual
-	  pages.)
+	  pages.
 
 	* manconv now guesses the input encoding based on the file name if
 	  it is not explicitly specified.

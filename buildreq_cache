@@ -1,4 +1,4 @@
-2.9.1
+2.9.2
 flex
 gdbm-dev
 glibc-locale
@@ -6,4 +6,3 @@ less
 libseccomp-dev
 pkgconfig(zlib)
 util-linux
-zlib-dev
