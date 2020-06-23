@@ -1,3 +1,16 @@
+man-db 2.9.3 (22 June 2020)
+===========================
+
+Major changes since man-db 2.9.2:
+
+	Fixes:
+	------
+
+	* Fix manual page translation infrastructure to compare po4a versions
+	  with more than two components correctly.
+
+	* Avoid incorrect markup in man(1) with po4a >= 0.58.
+
 man-db 2.9.2 (1 June 2020)
 ==========================
 

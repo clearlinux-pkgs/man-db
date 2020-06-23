@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x393587D97D86500B (cjwatson@debian.org)
 #
 Name     : man-db
-Version  : 2.9.2
-Release  : 43
-URL      : https://nongnu.askapache.com/man-db/man-db-2.9.2.tar.xz
-Source0  : https://nongnu.askapache.com/man-db/man-db-2.9.2.tar.xz
-Source1  : https://nongnu.askapache.com/man-db/man-db-2.9.2.tar.xz.asc
+Version  : 2.9.3
+Release  : 44
+URL      : https://nongnu.askapache.com/man-db/man-db-2.9.3.tar.xz
+Source0  : https://nongnu.askapache.com/man-db/man-db-2.9.3.tar.xz
+Source1  : https://nongnu.askapache.com/man-db/man-db-2.9.3.tar.xz.asc
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0 GPL-3.0 LGPL-2.1
@@ -141,8 +141,8 @@ services components for the man-db package.
 
 
 %prep
-%setup -q -n man-db-2.9.2
-cd %{_builddir}/man-db-2.9.2
+%setup -q -n man-db-2.9.3
+cd %{_builddir}/man-db-2.9.3
 %patch1 -p1
 
 %build
@@ -150,7 +150,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1591651172
+export SOURCE_DATE_EPOCH=1592940468
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -168,11 +168,11 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1591651172
+export SOURCE_DATE_EPOCH=1592940468
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/man-db
-cp %{_builddir}/man-db-2.9.2/docs/COPYING %{buildroot}/usr/share/package-licenses/man-db/b47456e2c1f38c40346ff00db976a2badf36b5e3
-cp %{_builddir}/man-db-2.9.2/docs/COPYING.LIB %{buildroot}/usr/share/package-licenses/man-db/545f380fb332eb41236596500913ff8d582e3ead
+cp %{_builddir}/man-db-2.9.3/docs/COPYING %{buildroot}/usr/share/package-licenses/man-db/b47456e2c1f38c40346ff00db976a2badf36b5e3
+cp %{_builddir}/man-db-2.9.3/docs/COPYING.LIB %{buildroot}/usr/share/package-licenses/man-db/545f380fb332eb41236596500913ff8d582e3ead
 %make_install
 %find_lang man-db-gnulib
 %find_lang man-db
@@ -206,9 +206,9 @@ cp %{_builddir}/man-db-2.9.2/docs/COPYING.LIB %{buildroot}/usr/share/package-lic
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/man-db/libman-2.9.2.so
+/usr/lib64/man-db/libman-2.9.3.so
 /usr/lib64/man-db/libman.so
-/usr/lib64/man-db/libmandb-2.9.2.so
+/usr/lib64/man-db/libmandb-2.9.3.so
 /usr/lib64/man-db/libmandb.so
 
 %files libexec
