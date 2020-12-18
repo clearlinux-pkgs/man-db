@@ -1,4 +1,4 @@
-From 221f398651919b2e2fae6062af6e84d346517ae5 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Michael Ikey Doherty <michael.i.doherty@intel.com>
 Date: Mon, 2 Feb 2015 15:36:35 +0000
 Subject: [PATCH] Use system defaults in absence of site configuration
@@ -16,10 +16,10 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  create mode 100644 m4/man-arg-default-config-file.m4
 
 diff --git a/configure.ac b/configure.ac
-index 519b42b..d9398b4 100644
+index de28cbf..eb5ddae 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -34,6 +34,7 @@ MAN_ARG_UNDOC
+@@ -35,6 +35,7 @@ MAN_ARG_UNDOC
  MAN_ARG_DEVICE
  MAN_ARG_DB
  MAN_ARG_CONFIG_FILE
@@ -55,10 +55,10 @@ index 0000000..38ec52b
 +AC_SUBST([default_config_file_dirname])
 +])
 diff --git a/src/Makefile.am b/src/Makefile.am
-index d485ef4..18a84a5 100644
+index c513bad..a3fa93f 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -44,6 +44,7 @@ AM_CPPFLAGS = \
+@@ -45,6 +45,7 @@ AM_CPPFLAGS = \
  	-I$(top_srcdir)/lib \
  	-I$(top_srcdir)/libdb \
  	-DCONFIG_FILE=\"$(config_file)\" \
@@ -66,7 +66,7 @@ index d485ef4..18a84a5 100644
  	-DAPROPOS=\"$(bindir)/$(TRANS_APROPOS)\" \
  	-DAPROPOS_NAME=\"$(TRANS_APROPOS)\" \
  	-DMAN=\"$(bindir)/$(TRANS_MAN)\" \
-@@ -184,12 +185,12 @@ install-exec-hook:
+@@ -204,12 +205,12 @@ install-exec-hook:
  		$(LN_S) $(TRANS_WHATIS)$(EXEEXT) $(TRANS_APROPOS)$(EXEEXT)
  
  install-data-hook:
@@ -85,10 +85,10 @@ index d485ef4..18a84a5 100644
  
  uninstall-hook:
 diff --git a/src/manp.c b/src/manp.c
-index 75e43f2..6385821 100644
+index 5441339..404e447 100644
 --- a/src/manp.c
 +++ b/src/manp.c
-@@ -866,16 +866,28 @@ void read_config_file (int optional)
+@@ -841,16 +841,28 @@ void read_config_file (bool optional)
  	}
  
  	if (getenv ("MAN_TEST_DISABLE_SYSTEM_CONFIG") == NULL) {
@@ -118,8 +118,5 @@ index 75e43f2..6385821 100644
 +				CONFIG_FILE);
 +
  		} else {
- 			debug ("From the config file %s:\n\n", CONFIG_FILE);
+ 			debug ("From the config file %s:\n", CONFIG_FILE);
  
--- 
-1.9.1
-

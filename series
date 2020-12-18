@@ -1,2 +1,2 @@
-stateless.patch
-cve-2015-1336.nopatch
+0001-Use-system-defaults-in-absence-of-site-configuration.patch
+0002-std-gnu11-Make-compatible-with-Autoconf-2.70.patch

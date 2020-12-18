@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Bruno Haible <bruno@clisp.org>
+Date: Wed, 9 Dec 2020 04:06:40 +0100
+Subject: [PATCH] std-gnu11: Make compatible with Autoconf 2.70.
+
+* m4/std-gnu11.m4: Disable the entire file if Autoconf >= 2.70 is in
+use.
+---
+ gl/m4/std-gnu11.m4 | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/gl/m4/std-gnu11.m4 b/gl/m4/std-gnu11.m4
+index c1ec624..2a37a3c 100644
+--- a/gl/m4/std-gnu11.m4
++++ b/gl/m4/std-gnu11.m4
+@@ -6,6 +6,8 @@
+ # This implementation will be obsolete once we can assume Autoconf 2.70
+ # or later is installed everywhere a Gnulib program might be developed.
+ 
++m4_version_prereq([2.70], [], [
++
+ 
+ # Copyright (C) 2001-2020 Free Software Foundation, Inc.
+ 
+@@ -822,3 +824,6 @@ dnl Tru64	N/A (no support)
+ dnl with extended modes being tried first.
+ [[-std=gnu++11 -std=c++11 -std=gnu++0x -std=c++0x -qlanglvl=extended0x -AA]], [$1], [$2])[]dnl
+ ])# _AC_PROG_CXX_CXX11
++
++
++])# m4_version_prereq

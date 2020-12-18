@@ -1,5 +1,7 @@
 Configure miss: whether the compiler is clang
 Configure miss: compiler option needed when checking for declarations
+Configure miss: linewrap.h
+Configure miss: crtdefs.h
 Configure miss: whether -Wno-missing-field-initializers is needed
 Configure miss: www-browser
 Configure miss: lynx
@@ -11,8 +13,7 @@ Configure miss: vgrind
 Configure miss: gvgrind
 Configure miss: grap
 Configure miss: compress
-Configure miss: linewrap.h
-Configure miss: crtdefs.h
+Configure miss: library containing yywrap
 Configure miss: whether C symbols are prefixed with underscore at the linker level
 Configure miss: whether getcwd aborts when 4k < cwd_length < 16k
 Configure miss: ioctl with POSIX signature

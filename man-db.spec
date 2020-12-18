@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.9.3
-Release  : 44
+Release  : 45
 URL      : https://nongnu.askapache.com/man-db/man-db-2.9.3.tar.xz
 Source0  : https://nongnu.askapache.com/man-db/man-db-2.9.3.tar.xz
 Source1  : https://nongnu.askapache.com/man-db/man-db-2.9.3.tar.xz.asc
@@ -41,8 +41,8 @@ BuildRequires : pkg-config-dev
 BuildRequires : pkgconfig(libpipeline)
 BuildRequires : pkgconfig(zlib)
 BuildRequires : util-linux
-Patch1: stateless.patch
-Patch2: cve-2015-1336.nopatch
+Patch1: 0001-Use-system-defaults-in-absence-of-site-configuration.patch
+Patch2: 0002-std-gnu11-Make-compatible-with-Autoconf-2.70.patch
 
 %description
 ========================================
@@ -144,13 +144,14 @@ services components for the man-db package.
 %setup -q -n man-db-2.9.3
 cd %{_builddir}/man-db-2.9.3
 %patch1 -p1
+%patch2 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1592940468
+export SOURCE_DATE_EPOCH=1608252458
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -165,10 +166,10 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1592940468
+export SOURCE_DATE_EPOCH=1608252458
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/man-db
 cp %{_builddir}/man-db-2.9.3/docs/COPYING %{buildroot}/usr/share/package-licenses/man-db/b47456e2c1f38c40346ff00db976a2badf36b5e3
