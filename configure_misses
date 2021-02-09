@@ -14,6 +14,7 @@ Configure miss: gvgrind
 Configure miss: grap
 Configure miss: compress
 Configure miss: library containing yywrap
+Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: whether C symbols are prefixed with underscore at the linker level
 Configure miss: whether getcwd aborts when 4k < cwd_length < 16k
 Configure miss: ioctl with POSIX signature
