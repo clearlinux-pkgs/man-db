@@ -7,9 +7,9 @@
 Name     : man-db
 Version  : 2.9.4
 Release  : 46
-URL      : https://nongnu.askapache.com/man-db/man-db-2.9.4.tar.xz
-Source0  : https://nongnu.askapache.com/man-db/man-db-2.9.4.tar.xz
-Source1  : https://nongnu.askapache.com/man-db/man-db-2.9.4.tar.xz.asc
+URL      : https://download.savannah.nongnu.org/releases/man-db/man-db-2.9.4.tar.xz
+Source0  : https://download.savannah.nongnu.org/releases/man-db/man-db-2.9.4.tar.xz
+Source1  : https://download.savannah.nongnu.org/releases/man-db/man-db-2.9.4.tar.xz.asc
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0 GPL-3.0 LGPL-2.1
