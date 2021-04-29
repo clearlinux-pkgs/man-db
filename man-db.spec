@@ -6,7 +6,7 @@
 #
 Name     : man-db
 Version  : 2.9.4
-Release  : 46
+Release  : 47
 URL      : https://download.savannah.nongnu.org/releases/man-db/man-db-2.9.4.tar.xz
 Source0  : https://download.savannah.nongnu.org/releases/man-db/man-db-2.9.4.tar.xz
 Source1  : https://download.savannah.nongnu.org/releases/man-db/man-db-2.9.4.tar.xz.asc
@@ -153,10 +153,10 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
 export SOURCE_DATE_EPOCH=1612852438
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FCFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
-export CXXFLAGS="$CXXFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
+export FCFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
+export FFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
+export CXXFLAGS="$CXXFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
 %reconfigure --disable-static --disable-setuid \
 --with-systemdsystemunitdir=/usr/lib/systemd/system
 make  %{?_smp_mflags}
