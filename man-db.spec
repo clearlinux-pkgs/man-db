@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x393587D97D86500B (cjwatson@debian.org)
 #
 Name     : man-db
-Version  : 2.9.4
-Release  : 47
-URL      : https://download.savannah.nongnu.org/releases/man-db/man-db-2.9.4.tar.xz
-Source0  : https://download.savannah.nongnu.org/releases/man-db/man-db-2.9.4.tar.xz
-Source1  : https://download.savannah.nongnu.org/releases/man-db/man-db-2.9.4.tar.xz.asc
+Version  : 2.10.0
+Release  : 48
+URL      : https://download.savannah.nongnu.org/releases/man-db/man-db-2.10.0.tar.xz
+Source0  : https://download.savannah.nongnu.org/releases/man-db/man-db-2.10.0.tar.xz
+Source1  : https://download.savannah.nongnu.org/releases/man-db/man-db-2.10.0.tar.xz.asc
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0 GPL-3.0 LGPL-2.1
@@ -42,12 +42,10 @@ BuildRequires : pkgconfig(libpipeline)
 BuildRequires : pkgconfig(zlib)
 BuildRequires : util-linux
 Patch1: 0001-Use-system-defaults-in-absence-of-site-configuration.patch
-Patch2: 0002-std-gnu11-Make-compatible-with-Autoconf-2.70.patch
 
 %description
-========================================
-Please read the man-db manual, included in the manual subdirectory of this
-distribution.  It contains configuration details and other aspects of this
+This directory contains an assortment of scripts:
+chconfig:	Converts a man-db configuration file to the FHS.
 
 %package bin
 Summary: bin components for the man-db package.
@@ -141,17 +139,16 @@ services components for the man-db package.
 
 
 %prep
-%setup -q -n man-db-2.9.4
-cd %{_builddir}/man-db-2.9.4
+%setup -q -n man-db-2.10.0
+cd %{_builddir}/man-db-2.10.0
 %patch1 -p1
-%patch2 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1612852438
+export SOURCE_DATE_EPOCH=1644265212
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
 export FCFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
@@ -169,11 +166,11 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1612852438
+export SOURCE_DATE_EPOCH=1644265212
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/man-db
-cp %{_builddir}/man-db-2.9.4/docs/COPYING %{buildroot}/usr/share/package-licenses/man-db/b47456e2c1f38c40346ff00db976a2badf36b5e3
-cp %{_builddir}/man-db-2.9.4/docs/COPYING.LIB %{buildroot}/usr/share/package-licenses/man-db/545f380fb332eb41236596500913ff8d582e3ead
+cp %{_builddir}/man-db-2.10.0/COPYING %{buildroot}/usr/share/package-licenses/man-db/4cc77b90af91e615a64ae04893fdffa7939db84c
+cp %{_builddir}/man-db-2.10.0/COPYING.LIB %{buildroot}/usr/share/package-licenses/man-db/01a6b4bf79aca9b556822601186afab86e8c4fbf
 %make_install
 %find_lang man-db-gnulib
 %find_lang man-db
@@ -207,9 +204,9 @@ cp %{_builddir}/man-db-2.9.4/docs/COPYING.LIB %{buildroot}/usr/share/package-lic
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/man-db/libman-2.9.4.so
+/usr/lib64/man-db/libman-2.10.0.so
 /usr/lib64/man-db/libman.so
-/usr/lib64/man-db/libmandb-2.9.4.so
+/usr/lib64/man-db/libmandb-2.10.0.so
 /usr/lib64/man-db/libmandb.so
 
 %files libexec
@@ -220,8 +217,8 @@ cp %{_builddir}/man-db-2.9.4/docs/COPYING.LIB %{buildroot}/usr/share/package-lic
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/man-db/545f380fb332eb41236596500913ff8d582e3ead
-/usr/share/package-licenses/man-db/b47456e2c1f38c40346ff00db976a2badf36b5e3
+/usr/share/package-licenses/man-db/01a6b4bf79aca9b556822601186afab86e8c4fbf
+/usr/share/package-licenses/man-db/4cc77b90af91e615a64ae04893fdffa7939db84c
 
 %files man
 %defattr(0644,root,root,0755)

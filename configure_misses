@@ -1,26 +1,25 @@
-Configure miss: whether the compiler is clang
-Configure miss: compiler option needed when checking for declarations
-Configure miss: linewrap.h
-Configure miss: crtdefs.h
-Configure miss: whether -Wno-missing-field-initializers is needed
-Configure miss: www-browser
-Configure miss: lynx
-Configure miss: elinks
-Configure miss: w3m
-Configure miss: pager
-Configure miss: gpreconv
-Configure miss: vgrind
-Configure miss: gvgrind
-Configure miss: grap
-Configure miss: compress
-Configure miss: library containing yywrap
-Configure miss: gcc options needed to detect all undeclared functions
-Configure miss: whether C symbols are prefixed with underscore at the linker level
-Configure miss: whether getcwd aborts when 4k < cwd_length < 16k
-Configure miss: ioctl with POSIX signature
-Configure miss: whether pthread_rwlock_rdlock prefers a writer to a reader
-Configure miss: whether mbrtowc stores incomplete characters
-Configure miss: working nanosleep
-Configure miss: working re_compile_pattern
 Configure miss: 32-bit host C ABI
+Configure miss: compiler option needed when checking for declarations
+Configure miss: compress
+Configure miss: crtdefs.h
+Configure miss: elinks
+Configure miss: gcc options needed to detect all undeclared functions
+Configure miss: gpreconv
+Configure miss: grap
+Configure miss: gvgrind
+Configure miss: ioctl with POSIX signature
+Configure miss: linewrap.h
+Configure miss: lynx
+Configure miss: pager
 Configure miss: po4a
+Configure miss: vgrind
+Configure miss: w3m
+Configure miss: whether -Wno-missing-field-initializers is needed
+Configure miss: whether C symbols are prefixed with underscore at the linker level
+Configure miss: whether mbrtowc stores incomplete characters
+Configure miss: whether pthread_rwlock_rdlock prefers a writer to a reader
+Configure miss: whether the compiler is clang
+Configure miss: whether the compiler produces multi-arch binaries
+Configure miss: whether this system supports file names of any length
+Configure miss: working nanosleep
+Configure miss: www-browser

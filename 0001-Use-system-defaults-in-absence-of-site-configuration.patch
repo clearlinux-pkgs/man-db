@@ -16,10 +16,10 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  create mode 100644 m4/man-arg-default-config-file.m4
 
 diff --git a/configure.ac b/configure.ac
-index de28cbf..eb5ddae 100644
+index f3f47be..0fac2c6 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -35,6 +35,7 @@ MAN_ARG_UNDOC
+@@ -34,6 +34,7 @@ MAN_ARG_UNDOC
  MAN_ARG_DEVICE
  MAN_ARG_DB
  MAN_ARG_CONFIG_FILE
@@ -55,7 +55,7 @@ index 0000000..38ec52b
 +AC_SUBST([default_config_file_dirname])
 +])
 diff --git a/src/Makefile.am b/src/Makefile.am
-index c513bad..a3fa93f 100644
+index e55cdda..4d7fce1 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
 @@ -45,6 +45,7 @@ AM_CPPFLAGS = \
@@ -66,7 +66,7 @@ index c513bad..a3fa93f 100644
  	-DAPROPOS=\"$(bindir)/$(TRANS_APROPOS)\" \
  	-DAPROPOS_NAME=\"$(TRANS_APROPOS)\" \
  	-DMAN=\"$(bindir)/$(TRANS_MAN)\" \
-@@ -204,12 +205,12 @@ install-exec-hook:
+@@ -223,12 +224,12 @@ install-exec-hook:
  		$(LN_S) $(TRANS_WHATIS)$(EXEEXT) $(TRANS_APROPOS)$(EXEEXT)
  
  install-data-hook:
@@ -85,10 +85,10 @@ index c513bad..a3fa93f 100644
  
  uninstall-hook:
 diff --git a/src/manp.c b/src/manp.c
-index 5441339..404e447 100644
+index 80b309a..d95ac19 100644
 --- a/src/manp.c
 +++ b/src/manp.c
-@@ -841,16 +841,28 @@ void read_config_file (bool optional)
+@@ -850,16 +850,28 @@ void read_config_file (bool optional)
  	}
  
  	if (getenv ("MAN_TEST_DISABLE_SYSTEM_CONFIG") == NULL) {
