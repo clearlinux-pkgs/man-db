@@ -1,5 +1,7 @@
 Configure miss: 32-bit host C ABI
 Configure miss: 32-bit host C ABI
+Configure miss: bool, true, false
+Configure miss: bool, true, false
 Configure miss: compiler option needed when checking for declarations
 Configure miss: compiler option needed when checking for declarations
 Configure miss: compress
@@ -8,6 +10,10 @@ Configure miss: crtdefs.h
 Configure miss: crtdefs.h
 Configure miss: elinks
 Configure miss: elinks
+Configure miss: gcc option for timestamps after 2038
+Configure miss: gcc option for timestamps after 2038
+Configure miss: gcc option to enable large file support
+Configure miss: gcc option to enable large file support
 Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: gcc options needed to detect all undeclared functions
 Configure miss: gpreconv
@@ -26,6 +32,8 @@ Configure miss: pager
 Configure miss: pager
 Configure miss: po4a
 Configure miss: po4a
+Configure miss: unreachable
+Configure miss: unreachable
 Configure miss: vgrind
 Configure miss: vgrind
 Configure miss: w3m
@@ -34,6 +42,8 @@ Configure miss: whether -Wno-missing-field-initializers is needed
 Configure miss: whether -Wno-missing-field-initializers is needed
 Configure miss: whether C symbols are prefixed with underscore at the linker level
 Configure miss: whether C symbols are prefixed with underscore at the linker level
+Configure miss: whether btowc is consistent with mbrtowc in the C locale
+Configure miss: whether btowc is consistent with mbrtowc in the C locale
 Configure miss: whether mbrtowc stores incomplete characters
 Configure miss: whether mbrtowc stores incomplete characters
 Configure miss: whether pthread_rwlock_rdlock prefers a writer to a reader
